@@ -1,0 +1,100 @@
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "yaml",
+      "value": "invoice: 34843\ndate   : 2001-01-23\nbill-to: &id001\n    given  : Chris\n    family : Dumars\n    address:\n        lines: |\n            458 Walkman Dr.\n            Suite #292\n        city    : Royal Oak\n        state   : MI\n        postal  : 48046\nship-to: *id001\nproduct:\n    - sku         : BL394D\n      quantity    : 4\n      description : Basketball\n      price       : 450.00\n    - sku         : BL4438H\n      quantity    : 1\n      description : Super Hoop\n      price       : 2392.00\ntax  : 251.42\ntotal: 4443.52\ncomments: >\n    Late afternoon is best.\n    Backup contact is Nancy\n    Billsmer @ 338-4338.",
+      "position": {
+        "start": {
+          "line": 1,
+          "column": 1,
+          "offset": 0
+        },
+        "end": {
+          "line": 30,
+          "column": 4,
+          "offset": 614
+        },
+        "indent": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "depth": 1,
+      "children": [
+        {
+          "type": "text",
+          "value": "Big document",
+          "position": {
+            "start": {
+              "line": 32,
+              "column": 3,
+              "offset": 618
+            },
+            "end": {
+              "line": 32,
+              "column": 15,
+              "offset": 630
+            },
+            "indent": []
+          }
+        }
+      ],
+      "position": {
+        "start": {
+          "line": 32,
+          "column": 1,
+          "offset": 616
+        },
+        "end": {
+          "line": 32,
+          "column": 15,
+          "offset": 630
+        },
+        "indent": []
+      }
+    }
+  ],
+  "position": {
+    "start": {
+      "line": 1,
+      "column": 1,
+      "offset": 0
+    },
+    "end": {
+      "line": 33,
+      "column": 1,
+      "offset": 631
+    }
+  }
+}
