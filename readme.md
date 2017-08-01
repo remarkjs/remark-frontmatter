@@ -84,8 +84,8 @@ If you are parsing from a different syntax, or compiling to a different syntax
 
 ###### `options`
 
-An optional configuration array defining all the supported frontmatters
-(`Array.<preset|Matter>?`, default: `['yaml']`).
+One [`preset`][preset] or [`Matter`][matter], or an array of them, defining all
+the supported frontmatters (default: `'yaml'`).
 
 ###### `preset`
 
@@ -147,6 +147,8 @@ An object with a `type` and a `marker`:
 [processor]: https://github.com/unifiedjs/unified#processor
 
 [mdast]: https://github.com/syntax-tree/mdast
+
+[preset]: #preset
 
 [matter]: #matter
 
