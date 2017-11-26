@@ -82,24 +82,107 @@ Adds [tokenizers][] if the [processor][] is configured with
 If you are parsing from a different syntax, or compiling to a different syntax
 (e.g., [`remark-man`][man]) your custom nodes may not be supported.
 
-###### `options`
+##### `options`
 
 One [`preset`][preset] or [`Matter`][matter], or an array of them, defining all
 the supported frontmatters (default: `'yaml'`).
 
-###### `preset`
+##### `preset`
 
 Either `'yaml'` or `'toml'`:
 
 *   `'yaml'` — [`matter`][matter] defined as `{type: 'yaml', marker: '-'}`
 *   `'toml'` — [`matter`][matter] defined as `{type: 'toml', marker: '+'}`
 
-###### `Matter`
+##### `Matter`
 
-An object with a `type` and a `marker`:
+An object with a `type` and either a `marker` or a `fence`:
 
 *   `type` (`string`) — Node type to parse to in [mdast][] and compile from
-*   `marker` (`string`) — Character used for fences
+*   `marker` (`string` or `{open: string, close: string}`) — Character used
+    to construct fences.  By providing an object with `open` and `close`.
+    different characters can be used for opening and closing fences.  For
+    example the character `'-'` will result in `'---'` being used as the fence
+*   `fence` (`string` or `{open: string, close: string}`) — String used as
+    the complete fence.  By providing an object with `open` and `close`
+    different values can be used for opening and closing fences.  This can be
+    used too if fences contain different characters or lengths other than 3
+
+###### Example
+
+For `{type: 'yaml', marker: '-'}`:
+
+```yaml
+---
+key: value
+---
+```
+
+Yields:
+
+```json
+{
+  "type": "yaml",
+  "value": "key: value"
+}
+```
+
+###### Example
+
+For `{type: 'custom', marker: {open: '<', close: '>'}}`:
+
+```text
+<<<
+data
+>>>
+```
+
+Yields:
+
+```json
+{
+  "type": "custom",
+  "value": "data"
+}
+```
+
+###### Example
+
+For `{type: 'custom', fence: '+=+=+=+'}`:
+
+```text
++=+=+=+
+data
++=+=+=+
+```
+
+Yields:
+
+```json
+{
+  "type": "custom",
+  "value": "dats"
+}
+```
+
+###### Example
+
+For `{type: 'json', fence: {open: '{', close: '}'}}`:
+
+```json
+{
+  "key": "value"
+}
+```
+
+Yields:
+
+```json
+{
+  "type": "json",
+  "value": "\"key\": \"value\""
+}
+```
 
 ## Related
 
