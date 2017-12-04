@@ -60,7 +60,7 @@ test('frontmatter()', function (t) {
     function () {
       unified().use(frontmatter, [{type: 'jsonml'}]).freeze();
     },
-    /^Error: Missing `marker` in matter `{"type":"jsonml"}`/,
+    /^Error: Missing `marker` or `fence` in matter `{"type":"jsonml"}`/,
     'should throw if given a matter without `marker`'
   );
 
