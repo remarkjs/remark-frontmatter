@@ -14,7 +14,8 @@
   "bugs": "https://github.com/wooorm/remark-frontmatter/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
-    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+    "Max Kueng <me@maxkueng.com>"
   ],
   "files": [
     "index.js",
