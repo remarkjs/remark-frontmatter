@@ -1,6 +1,6 @@
 {
   "name": "remark-frontmatter",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Frontmatter (yaml, toml, and more) support for remark",
   "license": "MIT",
   "keywords": [
