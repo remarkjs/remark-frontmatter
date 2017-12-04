@@ -100,36 +100,36 @@ An object with a `type` and either a `marker` or a `fence`:
 
 *   `type` (`string`) — Node type to parse to in [mdast][] and compile from
 *   `marker` (`string` or `{ open: string, close: string }`) — Character used
-    to construct fences. By providing an object with `open` and `close`
-    different characters can be used for opening and closing fences. For
+    to construct fences.  By providing an object with `open` and `close`.
+    different characters can be used for opening and closing fences.  For
     example the character `"-"` will result in `"---"` being used as the fence.
 *   `fence` (`string` or `{ open: string, close: string }`) — String used as
-    the complete fence. By providing an object with `open` and `close`
-    different strings can be used for opening and closing fences. This can be
+    the complete fence.  By providing an object with `open` and `close`
+    different strings can be used for opening and closing fences.  This can be
     used to if fences contain different characters or lengths other that 3.
 
 Examples of `Matter` objects:
 
 *   `{type: 'yaml', marker: '-'}`
-    ```
+    ```markdown
     ---
     ...matter content
     ---
     ```
 *   `{type: 'custom', marker: {open: '<', close: '>'}}`
-    ```
+    ```markdown
     <<<
     ...matter content
     >>>
     ```
 *   `{type: 'custom', fence: '+=+=+=+'}`
-    ```
+    ```markdown
     +=+=+=+
     ...matter content
     +=+=+=+
     ```
 *   `{type: 'json', fence: {open: '{', close: '}'}}`
-    ```
+    ```markdown
     {
     ...matter content
     }
