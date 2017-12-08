@@ -193,6 +193,13 @@ Yields:
 *   [`remark-yaml-config`](https://github.com/remarkjs/remark-yaml-config)
     — Configure remark from YAML configuration
 
+## Contribute
+
+See [`contribute.md` in `remarkjs/remarkj`][contribute] for ways to get started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -236,3 +243,7 @@ Yields:
 [matter]: #matter
 
 [man]: https://github.com/remarkjs/remark-man
+
+[contribute]: https://github.com/remarkjs/remark/blob/master/contributing.md
+
+[coc]: https://github.com/remarkjs/remark/blob/master/code-of-conduct.md
