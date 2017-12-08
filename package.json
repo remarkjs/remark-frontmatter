@@ -10,8 +10,8 @@
     "markdown",
     "remark"
   ],
-  "repository": "wooorm/remark-frontmatter",
-  "bugs": "https://github.com/wooorm/remark-frontmatter/issues",
+  "repository": "remarkjs/remark-frontmatter",
+  "bugs": "https://github.com/remarkjs/remark-frontmatter/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",

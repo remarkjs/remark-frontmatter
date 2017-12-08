@@ -186,11 +186,11 @@ Yields:
 
 ## Related
 
-*   [`remark-github`](https://github.com/wooorm/remark-github)
+*   [`remark-github`](https://github.com/remarkjs/remark-github)
     — Auto-link references like in GitHub issues, PRs, and comments
 *   [`remark-math`](https://github.com/rokt33r/remark-math)
     — Math support
-*   [`remark-yaml-config`](https://github.com/wooorm/remark-yaml-config)
+*   [`remark-yaml-config`](https://github.com/remarkjs/remark-yaml-config)
     — Configure remark from YAML configuration
 
 ## License
@@ -199,17 +199,17 @@ Yields:
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/wooorm/remark-frontmatter.svg
+[build-badge]: https://img.shields.io/travis/remarkjs/remark-frontmatter.svg
 
-[build-status]: https://travis-ci.org/wooorm/remark-frontmatter
+[build-status]: https://travis-ci.org/remarkjs/remark-frontmatter
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/remark-frontmatter.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/remarkjs/remark-frontmatter.svg
 
-[coverage-status]: https://codecov.io/github/wooorm/remark-frontmatter
+[coverage-status]: https://codecov.io/github/remarkjs/remark-frontmatter
 
-[chat-badge]: https://img.shields.io/gitter/room/wooorm/remark.svg
+[chat-badge]: https://img.shields.io/gitter/room/remarkjs/Lobby.svg
 
-[chat]: https://gitter.im/wooorm/remark
+[chat]: https://gitter.im/remarkjs/Lobby
 
 [license]: LICENSE
 
@@ -217,15 +217,15 @@ Yields:
 
 [npm]: https://docs.npmjs.com/cli/install
 
-[remark]: https://github.com/wooorm/remark
+[remark]: https://github.com/remarkjs/remark
 
-[parse]: https://github.com/wooorm/remark/tree/master/packages/remark-parse
+[parse]: https://github.com/remarkjs/remark/tree/master/packages/remark-parse
 
-[tokenizers]: https://github.com/wooorm/remark/tree/master/packages/remark-parse#parserblocktokenizers
+[tokenizers]: https://github.com/remarkjs/remark/tree/master/packages/remark-parse#parserblocktokenizers
 
-[stringify]: https://github.com/wooorm/remark/tree/master/packages/remark-stringify
+[stringify]: https://github.com/remarkjs/remark/tree/master/packages/remark-stringify
 
-[visitors]: https://github.com/wooorm/remark/tree/master/packages/remark-stringify#compilervisitors
+[visitors]: https://github.com/remarkjs/remark/tree/master/packages/remark-stringify#compilervisitors
 
 [processor]: https://github.com/unifiedjs/unified#processor
 
@@ -235,4 +235,4 @@ Yields:
 
 [matter]: #matter
 
-[man]: https://github.com/wooorm/remark-man
+[man]: https://github.com/remarkjs/remark-man
