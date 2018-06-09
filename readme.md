@@ -1,3 +1,6 @@
+# Changes
+* Allow frontmatter anywhere in markdown (and multiple times)
+
 # remark-frontmatter [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
 
 Frontmatter (YAML, TOML, and more) support for [**remark**][remark].
