@@ -1,7 +1,7 @@
-# Two horizontal rules
+# YAML not at the top
 
-* * *
+---
+title: post
+---
 
-## A horizontal rule
-
-and another.
+some text
