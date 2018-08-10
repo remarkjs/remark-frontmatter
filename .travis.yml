@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-- '4.0'
-- '9.0'
+- lts/boron
+- node
 after_script: bash <(curl -s https://codecov.io/bash)
 deploy:
   - provider: npm
@@ -11,7 +11,6 @@ deploy:
       secure: objjrd4n9UvLRppfsBppo0KXO8q9PIR1oSSvAtZ42H4mIdFo5hBj6iR70YHUQ560TidsSITexvcwouLyaBuajibnh3N7sVCZUELhVOXGXgoJtxrsvoyH3G3nziWoManKACsqQa2NSHsqRKv+np7EbKnE8RI+57CJXR7M9v/Zu04Slsmp6HjVdEDkYW8H8R/ZeRWDOyTHJvn3DJQvG/qhzWitE+EJ/Z9bcYBehD+o+0MD2YI/WDgZYa88u74rB99jVXH83UMtc4Xotu6DhzUIaRDGeNomVnZc4dEr+w+v7139L4xrXJGuCzQ4Sq1yBLRTCetBdfpEeXvtqFH+KSQkBh9tXWS6Zgi+j6vRX9j3SjcShC5XTgtJCam6wvwuu3VDDIfRAopoJCUaluhqM9SvYQHU19MHuhNe8z804C6VA8MES6wQ4MFBrstX1vZk/SWjLjsYXGU+qy5RNWmHc/oyLPM5+io/altMpwxwZhJsCF43fwlSiMdO6b1dkbPazA0/h73c8I96VdrWLI6yFZUO8YIr8ZQbxkm4tIulYa4BFp/lqthUxHKHx6PPZS9d6bK3/Shz9xfJJ6YfBdR6prPyM/Bu/n+61KtSGxtkDsjb0lxWqnU6eXAQ06XNCQhn/xi4ApbY7gQtVIZYdIZJFErObSOv7LFgYndPNV/uEfBiy1U=
     on:
       tags: true
-      node: '9.0'
   - provider: releases
     skip_cleanup: true
     api_key:
@@ -21,4 +20,3 @@ deploy:
       - "remark-frontmatter.min.js"
     on:
       tags: true
-      node: '9.0'
