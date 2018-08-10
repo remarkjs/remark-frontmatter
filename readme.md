@@ -25,25 +25,25 @@ title = "New Website"
 And our script, `example.js`, looks as follows:
 
 ```javascript
-var vfile = require('to-vfile');
-var report = require('vfile-reporter');
-var unified = require('unified');
-var parse = require('remark-parse');
-var stringify = require('remark-stringify');
-var frontmatter = require('remark-frontmatter');
+var vfile = require('to-vfile')
+var report = require('vfile-reporter')
+var unified = require('unified')
+var parse = require('remark-parse')
+var stringify = require('remark-stringify')
+var frontmatter = require('remark-frontmatter')
 
 unified()
   .use(parse)
   .use(stringify)
   .use(frontmatter, ['yaml', 'toml'])
   .use(logger)
-  .process(vfile.readSync('example.md'), function (err, file) {
-    console.log(String(file));
-    console.error(report(err || file));
-  });
+  .process(vfile.readSync('example.md'), function(err, file) {
+    console.log(String(file))
+    console.error(report(err || file))
+  })
 
 function logger() {
-  return console.dir;
+  return console.dir
 }
 ```
 
