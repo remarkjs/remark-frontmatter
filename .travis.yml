@@ -4,19 +4,12 @@ node_js:
 - node
 after_script: bash <(curl -s https://codecov.io/bash)
 deploy:
-  - provider: npm
-    skip_cleanup: true
-    email: tituswormer@gmail.com
-    api_key:
-      secure: objjrd4n9UvLRppfsBppo0KXO8q9PIR1oSSvAtZ42H4mIdFo5hBj6iR70YHUQ560TidsSITexvcwouLyaBuajibnh3N7sVCZUELhVOXGXgoJtxrsvoyH3G3nziWoManKACsqQa2NSHsqRKv+np7EbKnE8RI+57CJXR7M9v/Zu04Slsmp6HjVdEDkYW8H8R/ZeRWDOyTHJvn3DJQvG/qhzWitE+EJ/Z9bcYBehD+o+0MD2YI/WDgZYa88u74rB99jVXH83UMtc4Xotu6DhzUIaRDGeNomVnZc4dEr+w+v7139L4xrXJGuCzQ4Sq1yBLRTCetBdfpEeXvtqFH+KSQkBh9tXWS6Zgi+j6vRX9j3SjcShC5XTgtJCam6wvwuu3VDDIfRAopoJCUaluhqM9SvYQHU19MHuhNe8z804C6VA8MES6wQ4MFBrstX1vZk/SWjLjsYXGU+qy5RNWmHc/oyLPM5+io/altMpwxwZhJsCF43fwlSiMdO6b1dkbPazA0/h73c8I96VdrWLI6yFZUO8YIr8ZQbxkm4tIulYa4BFp/lqthUxHKHx6PPZS9d6bK3/Shz9xfJJ6YfBdR6prPyM/Bu/n+61KtSGxtkDsjb0lxWqnU6eXAQ06XNCQhn/xi4ApbY7gQtVIZYdIZJFErObSOv7LFgYndPNV/uEfBiy1U=
-    on:
-      tags: true
-  - provider: releases
-    skip_cleanup: true
-    api_key:
-      secure: Dc/5DvsDZzR53SdDUw9TTsIb+tVgG3ydOfGb73NF5vA24c3hO2LtPgiPFBiuUsPCZc1XcV0LSfmL9VqzepQrhJ1tu83FRfNnTOtzSYegXhTy8s5YjMIE0mGE2nbOSU3k0D05PBh7yTJWgmRrK6gILj82aBb/W2QjNjUPggwWHBbDAmUUOtGv6iq0LQ5A8WHJ2n8SjCI7qqYkmlcL19Gmu0A2X5Srv+RCjrfUESQPt+GaadWRj+8ewdt1LtYm3UuOy0yyK3BcplqDF3KScZlFvQGJmasNYGMa+dAwvqp+IFQ5uGBvQ+zNhbbRLhLvc9xxpRCZstva1NbTaU1oxPl8q3S6ro0lI1fjkQr/kpEwfTfw1wDnssWT0X76t3Vpa1A6XVv+kTNvSyns/7iuLpw7iftLLd45klF4LbCCJmCBPoPms2oHabHgGp4xh6cuUqj/QVx1/xv429qd51l1AgLZkqLK7mTyY/3iabLDAEQc9/4JSyTnXH9UTLz/Ega0PKtX/Gp0otH9C2HHV7jw7rEwI3aQfObjBCKxa2t3wNJnCWb62RAazb3OOUMZL6RsROAKFj+pd/6FHYyFzt0qUa1EiYA65eKBWHbEETE7Xw5DFuxY+kyWCH05yOoluZYAXUIO5utPTGERTxdkM0ye4Jw7pusojayM3svgjX02M1Zzt8I=
-    file:
-      - "remark-frontmatter.js"
-      - "remark-frontmatter.min.js"
-    on:
-      tags: true
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: Dc/5DvsDZzR53SdDUw9TTsIb+tVgG3ydOfGb73NF5vA24c3hO2LtPgiPFBiuUsPCZc1XcV0LSfmL9VqzepQrhJ1tu83FRfNnTOtzSYegXhTy8s5YjMIE0mGE2nbOSU3k0D05PBh7yTJWgmRrK6gILj82aBb/W2QjNjUPggwWHBbDAmUUOtGv6iq0LQ5A8WHJ2n8SjCI7qqYkmlcL19Gmu0A2X5Srv+RCjrfUESQPt+GaadWRj+8ewdt1LtYm3UuOy0yyK3BcplqDF3KScZlFvQGJmasNYGMa+dAwvqp+IFQ5uGBvQ+zNhbbRLhLvc9xxpRCZstva1NbTaU1oxPl8q3S6ro0lI1fjkQr/kpEwfTfw1wDnssWT0X76t3Vpa1A6XVv+kTNvSyns/7iuLpw7iftLLd45klF4LbCCJmCBPoPms2oHabHgGp4xh6cuUqj/QVx1/xv429qd51l1AgLZkqLK7mTyY/3iabLDAEQc9/4JSyTnXH9UTLz/Ega0PKtX/Gp0otH9C2HHV7jw7rEwI3aQfObjBCKxa2t3wNJnCWb62RAazb3OOUMZL6RsROAKFj+pd/6FHYyFzt0qUa1EiYA65eKBWHbEETE7Xw5DFuxY+kyWCH05yOoluZYAXUIO5utPTGERTxdkM0ye4Jw7pusojayM3svgjX02M1Zzt8I=
+  file:
+    - "remark-frontmatter.js"
+    - "remark-frontmatter.min.js"
+  on:
+    tags: true
