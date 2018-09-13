@@ -107,6 +107,9 @@ An object with a `type` and either a `marker` or a `fence`:
     the complete fence.  By providing an object with `open` and `close`
     different values can be used for opening and closing fences.  This can be
     used too if fences contain different characters or lengths other than 3
+*   `anywhere` (`boolean`, default: `false`) – if `true`, Matter blocks will be
+    found anywhere in the document.  If `false` (default), only matter at the
+    front of the document will be considered.
 
 ###### Example
 
