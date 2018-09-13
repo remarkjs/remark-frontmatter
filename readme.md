@@ -1,6 +1,3 @@
-# Changes
-* Allow frontmatter anywhere in markdown (and multiple times)
-
 # remark-frontmatter [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
 
 Frontmatter (YAML, TOML, and more) support for [**remark**][remark].
@@ -28,25 +25,25 @@ title = "New Website"
 And our script, `example.js`, looks as follows:
 
 ```javascript
-var vfile = require('to-vfile');
-var report = require('vfile-reporter');
-var unified = require('unified');
-var parse = require('remark-parse');
-var stringify = require('remark-stringify');
-var frontmatter = require('remark-frontmatter');
+var vfile = require('to-vfile')
+var report = require('vfile-reporter')
+var unified = require('unified')
+var parse = require('remark-parse')
+var stringify = require('remark-stringify')
+var frontmatter = require('remark-frontmatter')
 
 unified()
   .use(parse)
   .use(stringify)
   .use(frontmatter, ['yaml', 'toml'])
   .use(logger)
-  .process(vfile.readSync('example.md'), function (err, file) {
-    console.log(String(file));
-    console.error(report(err || file));
-  });
+  .process(vfile.readSync('example.md'), function(err, file) {
+    console.log(String(file))
+    console.error(report(err || file))
+  })
 
 function logger() {
-  return console.dir;
+  return console.dir
 }
 ```
 
@@ -198,7 +195,8 @@ Yields:
 
 ## Contribute
 
-See [`contribute.md` in `remarkjs/remarkj`][contribute] for ways to get started.
+See [`contributing.md` in `remarkjs/remark`][contributing] for ways to get
+started.
 
 This organisation has a [Code of Conduct][coc].  By interacting with this
 repository, organisation, or community you agree to abide by its terms.
@@ -247,6 +245,6 @@ repository, organisation, or community you agree to abide by its terms.
 
 [man]: https://github.com/remarkjs/remark-man
 
-[contribute]: https://github.com/remarkjs/remark/blob/master/contributing.md
+[contributing]: https://github.com/remarkjs/remark/blob/master/contributing.md
 
 [coc]: https://github.com/remarkjs/remark/blob/master/code-of-conduct.md
