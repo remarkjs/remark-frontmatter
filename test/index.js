@@ -94,20 +94,20 @@ test('fixtures', function(t) {
 
       try {
         config = JSON.parse(read(join(base, fixture, 'config.json')))
-      } catch (err) {}
+      } catch (error) {}
 
       proc = remark().use(frontmatter, config)
       actual = proc.parse(input)
 
       try {
         output = read(outputPath, 'utf8')
-      } catch (err) {
+      } catch (error) {
         output = String(input)
       }
 
       try {
         expected = JSON.parse(read(treePath))
-      } catch (err) {
+      } catch (error) {
         /* New fixture. */
         write(treePath, JSON.stringify(actual, 0, 2) + '\n')
         expected = actual
