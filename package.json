@@ -12,9 +12,9 @@
   ],
   "repository": "remarkjs/remark-frontmatter",
   "bugs": "https://github.com/remarkjs/remark-frontmatter/issues",
-  "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+  "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
   "contributors": [
-    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
     "Max Kueng <me@maxkueng.com>"
   ],
   "files": [
