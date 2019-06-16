@@ -1,20 +1,24 @@
 {
   "name": "remark-frontmatter",
   "version": "1.3.1",
-  "description": "Frontmatter (yaml, toml, and more) support for remark",
+  "description": "remark plugin to support frontmatter (yaml, toml, and more)",
   "license": "MIT",
   "keywords": [
+    "unified",
+    "remark",
+    "plugin",
+    "mdast",
+    "markdown",
     "frontmatter",
     "yaml",
-    "toml",
-    "markdown",
-    "remark"
+    "toml"
   ],
   "repository": "remarkjs/remark-frontmatter",
   "bugs": "https://github.com/remarkjs/remark-frontmatter/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+    "Lars Trieloff <lars@trieloff.net>",
     "Max Kueng <me@maxkueng.com>"
   ],
   "files": [
