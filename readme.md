@@ -3,21 +3,22 @@
 [![Build][build-badge]][build]
 [![Coverage][coverage-badge]][coverage]
 [![Downloads][downloads-badge]][downloads]
-[![Chat][chat-badge]][chat]
+[![Size][size-badge]][size]
 [![Sponsors][sponsors-badge]][collective]
 [![Backers][backers-badge]][collective]
+[![Chat][chat-badge]][chat]
 
-Frontmatter (YAML, TOML, and more) support for [**remark**][remark].
+[**remark**][remark] plugin to support frontmatter (YAML, TOML, and more).
 
-## Installation
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install remark-frontmatter
 ```
 
-## Usage
+## Use
 
 Say we have the following file, `example.md`:
 
@@ -31,7 +32,7 @@ title = "New Website"
 
 And our script, `example.js`, looks as follows:
 
-```javascript
+```js
 var vfile = require('to-vfile')
 var report = require('vfile-reporter')
 var unified = require('unified')
@@ -80,14 +81,15 @@ title = "New Website"
 
 ## API
 
-### `remark.use(frontmatter[, options])`
+### `remark().use(frontmatter[, options])`
 
+Support frontmatter (YAML, TOML, and more).
 Adds [tokenizers][] if the [processor][] is configured with
 [`remark-parse`][parse], and [visitors][] if configured with
 [`remark-stringify`][stringify].
 
 If you are parsing from a different syntax, or compiling to a different syntax
-(e.g., [`remark-man`][man]) your custom nodes may not be supported.
+(such as, [`remark-man`][man]) your custom nodes may not be supported.
 
 ##### `options`
 
@@ -205,11 +207,13 @@ Yields:
 
 ## Contribute
 
-See [`contributing.md` in `remarkjs/remark`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`remarkjs/.github`][health] for ways
+to get started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -217,7 +221,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/remarkjs/remark-frontmatter.svg
+[build-badge]: https://img.shields.io/travis/remarkjs/remark-frontmatter/master.svg
 
 [build]: https://travis-ci.org/remarkjs/remark-frontmatter
 
@@ -229,9 +233,9 @@ repository, organisation, or community you agree to abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/remark-frontmatter
 
-[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+[size-badge]: https://img.shields.io/bundlephobia/minzip/remark-frontmatter.svg
 
-[chat]: https://spectrum.chat/unified/remark
+[size]: https://bundlephobia.com/result?p=remark-frontmatter
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -239,11 +243,23 @@ repository, organisation, or community you agree to abide by its terms.
 
 [collective]: https://opencollective.com/unified
 
+[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+
+[chat]: https://spectrum.chat/unified/remark
+
+[npm]: https://docs.npmjs.com/cli/install
+
+[health]: https://github.com/remarkjs/.github
+
+[contributing]: https://github.com/remarkjs/.github/blob/master/contributing.md
+
+[support]: https://github.com/remarkjs/.github/blob/master/support.md
+
+[coc]: https://github.com/remarkjs/.github/blob/master/code-of-conduct.md
+
 [license]: license
 
 [author]: https://wooorm.com
-
-[npm]: https://docs.npmjs.com/cli/install
 
 [remark]: https://github.com/remarkjs/remark
 
@@ -259,12 +275,8 @@ repository, organisation, or community you agree to abide by its terms.
 
 [mdast]: https://github.com/syntax-tree/mdast
 
+[man]: https://github.com/remarkjs/remark-man
+
 [preset]: #preset
 
 [matter]: #matter
-
-[man]: https://github.com/remarkjs/remark-man
-
-[contributing]: https://github.com/remarkjs/remark/blob/master/contributing.md
-
-[coc]: https://github.com/remarkjs/remark/blob/master/code-of-conduct.md
