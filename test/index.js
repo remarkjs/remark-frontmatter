@@ -108,7 +108,7 @@ test('fixtures', function(t) {
       try {
         expected = JSON.parse(read(treePath))
       } catch (error) {
-        /* New fixture. */
+        // New fixture.
         write(treePath, JSON.stringify(actual, 0, 2) + '\n')
         expected = actual
       }
