@@ -190,6 +190,12 @@ Yields:
 }
 ```
 
+## Security
+
+Use of `remark-frontmatter` does not involve [**rehype**][rehype]
+([**hast**][hast]) or user content so there are no openings for
+[cross-site scripting (XSS)][xss] attacks.
+
 ## Related
 
 *   [`remark-github`](https://github.com/remarkjs/remark-github)
@@ -274,3 +280,9 @@ abide by its terms.
 [preset]: #preset
 
 [matter]: #matter
+
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[rehype]: https://github.com/rehypejs/rehype
+
+[hast]: https://github.com/syntax-tree/hast
