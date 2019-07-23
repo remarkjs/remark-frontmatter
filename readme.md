@@ -139,8 +139,6 @@ Yields:
 }
 ```
 
-###### Example
-
 For `{type: 'custom', marker: {open: '<', close: '>'}}`:
 
 ```text
@@ -158,8 +156,6 @@ Yields:
 }
 ```
 
-###### Example
-
 For `{type: 'custom', fence: '+=+=+=+'}`:
 
 ```text
@@ -176,8 +172,6 @@ Yields:
   "value": "dats"
 }
 ```
-
-###### Example
 
 For `{type: 'json', fence: {open: '{', close: '}'}}`:
 
