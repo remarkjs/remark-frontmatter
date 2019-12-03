@@ -169,7 +169,7 @@ Yields:
 ```json
 {
   "type": "custom",
-  "value": "dats"
+  "value": "data"
 }
 ```
 
