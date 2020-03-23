@@ -107,18 +107,23 @@ Either `'yaml'` or `'toml'`:
 
 An object with a `type` and either a `marker` or a `fence`:
 
-*   `type` (`string`) — Node type to parse to in [mdast][] and compile from
-*   `marker` (`string` or `{open: string, close: string}`) — Character used
-    to construct fences.  By providing an object with `open` and `close`.
-    different characters can be used for opening and closing fences.  For
-    example the character `'-'` will result in `'---'` being used as the fence
-*   `fence` (`string` or `{open: string, close: string}`) — String used as
-    the complete fence.  By providing an object with `open` and `close`
-    different values can be used for opening and closing fences.  This can be
-    used too if fences contain different characters or lengths other than 3
-*   `anywhere` (`boolean`, default: `false`) – if `true`, matter can be
-    found anywhere in the document.  If `false` (default), only matter at the
-    start of the document is recognised.
+*   `type` (`string`)
+    — Node type to parse to in [mdast][] and compile from
+*   `marker` (`string` or `{open: string, close: string}`)
+    — Character used to construct fences.
+    By providing an object with `open` and `close`.
+    different characters can be used for opening and closing fences.
+    For example the character `'-'` will result in `'---'` being used as the
+    fence
+*   `fence` (`string` or `{open: string, close: string}`)
+    — String used as the complete fence.
+    By providing an object with `open` and `close` different values can be used
+    for opening and closing fences.
+    This can be used too if fences contain different characters or lengths other
+    than 3
+*   `anywhere` (`boolean`, default: `false`)
+    – if `true`, matter can be found anywhere in the document.
+    If `false` (default), only matter at the start of the document is recognized
 
 ###### Example
 
@@ -211,8 +216,8 @@ See [`contributing.md`][contributing] in [`remarkjs/.github`][health] for ways
 to get started.
 See [`support.md`][support] for ways to get help.
 
-This project has a [Code of Conduct][coc].
-By interacting with this repository, organisation, or community you agree to
+This project has a [code of conduct][coc].
+By interacting with this repository, organization, or community you agree to
 abide by its terms.
 
 ## License
@@ -243,7 +248,7 @@ abide by its terms.
 
 [collective]: https://opencollective.com/unified
 
-[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+[chat-badge]: https://img.shields.io/badge/chat-spectrum-7b16ff.svg
 
 [chat]: https://spectrum.chat/unified/remark
 
