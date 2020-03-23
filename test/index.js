@@ -15,43 +15,35 @@ var read = fs.readFileSync
 var write = fs.writeFileSync
 var dir = fs.readdirSync
 
-test('frontmatter()', function(t) {
+test('frontmatter()', function (t) {
   t.equal(typeof frontmatter, 'function', 'should be a function')
 
-  t.doesNotThrow(function() {
-    remark()
-      .use(frontmatter)
-      .freeze()
+  t.doesNotThrow(function () {
+    remark().use(frontmatter).freeze()
   }, 'should not throw if not passed options')
 
-  t.doesNotThrow(function() {
-    unified()
-      .use(frontmatter)
-      .freeze()
+  t.doesNotThrow(function () {
+    unified().use(frontmatter).freeze()
   }, 'should not throw if without parser or compiler')
 
   t.throws(
-    function() {
-      unified()
-        .use(frontmatter, [1])
-        .freeze()
+    function () {
+      unified().use(frontmatter, [1]).freeze()
     },
     /^Error: Expected matter to be an object, not `1`/,
     'should throw if not given a preset or a matter'
   )
 
   t.throws(
-    function() {
-      unified()
-        .use(frontmatter, ['jsonml'])
-        .freeze()
+    function () {
+      unified().use(frontmatter, ['jsonml']).freeze()
     },
     /^Error: Missing matter definition for `jsonml`/,
     'should throw if given an unknown preset'
   )
 
   t.throws(
-    function() {
+    function () {
       unified()
         .use(frontmatter, [{marker: '*'}])
         .freeze()
@@ -61,7 +53,7 @@ test('frontmatter()', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       unified()
         .use(frontmatter, [{type: 'jsonml'}])
         .freeze()
@@ -73,7 +65,7 @@ test('frontmatter()', function(t) {
   t.end()
 })
 
-test('fixtures', function(t) {
+test('fixtures', function (t) {
   var base = join(__dirname, 'fixtures')
   var entries = dir(base).filter(not(hidden))
 
@@ -82,7 +74,7 @@ test('fixtures', function(t) {
   entries.forEach(each)
 
   function each(fixture) {
-    t.test(fixture, function(st) {
+    t.test(fixture, function (st) {
       var input = vfile.readSync(join(base, fixture, 'input.md'))
       var treePath = join(base, fixture, 'tree.json')
       var outputPath = join(base, fixture, 'output.md')
