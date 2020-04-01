@@ -1,4 +1,5 @@
-import { Plugin } from 'unified';
+import { Plugin} from 'unified';
+import { Node } from 'unist';
 
 declare namespace remarkFrontmatter {
   type Frontmatter = Plugin<[RemarkFrontmatterOptions?]>;
@@ -44,6 +45,16 @@ declare namespace remarkFrontmatter {
   }
 
   type RemarkFrontmatterOptions = (Preset | Matter)[];
+
+  interface YamlNode extends Node {
+    type: 'yaml';
+    value: string;
+  }
+
+  interface TomlNode extends Node {
+    type: 'toml';
+    value: string;
+  }
 }
 
 declare const remarkFrontmatter: remarkFrontmatter.Frontmatter;
