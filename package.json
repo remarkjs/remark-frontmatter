@@ -28,8 +28,10 @@
   ],
   "files": [
     "index.js",
-    "lib"
+    "lib",
+    "types/index.d.ts"
   ],
+  "types": "types/index.d.ts",
   "dependencies": {
     "fault": "^1.0.1",
     "xtend": "^4.0.1"
