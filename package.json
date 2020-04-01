@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "browserify": "^16.0.0",
+    "dtslint": "^3.4.1",
     "is-hidden": "^1.0.0",
     "not": "^0.1.0",
     "nyc": "^15.0.0",
@@ -52,13 +53,14 @@
     "xo": "^0.28.0"
   },
   "scripts": {
-    "format": "remark *.md -qfo && prettier --write \"**/*.js\" && xo --fix",
+    "format": "remark *.md -qfo && prettier --write . && xo --fix",
     "build-bundle": "browserify . -s remarkFrontmatter > remark-frontmatter.js",
     "build-mangle": "browserify . -s remarkFrontmatter -p tinyify > remark-frontmatter.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
-    "test": "npm run format && npm run build && npm run test-coverage"
+    "test-types": "dtslint types",
+    "test": "npm run format && npm run build && npm run test-coverage && npm run test-types"
   },
   "nyc": {
     "check-coverage": true,

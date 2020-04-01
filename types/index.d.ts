@@ -1,21 +1,21 @@
-import { Plugin} from 'unified';
-import { Node } from 'unist';
+import {Plugin} from 'unified'
+import {Node} from 'unist'
 
 declare namespace remarkFrontmatter {
-  type Frontmatter = Plugin<[RemarkFrontmatterOptions?]>;
+  type Frontmatter = Plugin<[RemarkFrontmatterOptions?]>
 
-  type Preset = 'yaml' | 'toml';
+  type Preset = 'yaml' | 'toml'
 
   interface Fence {
-    open: string;
-    close: string;
+    open: string
+    close: string
   }
 
   interface Matter {
     /**
      * Node type to parse to in [mdast](https://github.com/syntax-tree/mdast) and compile from.
      */
-    type: string;
+    type: string
 
     /**
      * Character used to construct fences.
@@ -24,7 +24,7 @@ declare namespace remarkFrontmatter {
      * For example the character `'-'` will result in `'---'` being used as the
      * fence.
      */
-    marker?: string | Fence;
+    marker?: string | Fence
 
     /**
      * String used as the complete fence.
@@ -33,7 +33,7 @@ declare namespace remarkFrontmatter {
      * This can be used too if fences contain different characters or lengths other
      * than 3
      */
-    fence?: string | Fence;
+    fence?: string | Fence
 
     /**
      * if `true`, matter can be found anywhere in the document.
@@ -41,22 +41,22 @@ declare namespace remarkFrontmatter {
      *
      * @default false
      */
-    anywhere?: boolean;
+    anywhere?: boolean
   }
 
-  type RemarkFrontmatterOptions = (Preset | Matter)[];
+  type RemarkFrontmatterOptions = (Preset | Matter)[]
 
   interface YamlNode extends Node {
-    type: 'yaml';
-    value: string;
+    type: 'yaml'
+    value: string
   }
 
   interface TomlNode extends Node {
-    type: 'toml';
-    value: string;
+    type: 'toml'
+    value: string
   }
 }
 
-declare const remarkFrontmatter: remarkFrontmatter.Frontmatter;
+declare const remarkFrontmatter: remarkFrontmatter.Frontmatter
 
-export = remarkFrontmatter;
+export = remarkFrontmatter
