@@ -1,3 +1,4 @@
+// Minimum TypeScript Version: 3.2
 import {Plugin} from 'unified'
 import {Node} from 'unist'
 
@@ -44,7 +45,7 @@ declare namespace remarkFrontmatter {
     anywhere?: boolean
   }
 
-  type RemarkFrontmatterOptions = (Preset | Matter)[]
+  type RemarkFrontmatterOptions = Array<Preset | Matter>
 
   interface YamlNode extends Node {
     type: 'yaml'
