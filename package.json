@@ -83,7 +83,8 @@
       "guard-for-in": "off"
     },
     "ignores": [
-      "remark-frontmatter.js"
+      "remark-frontmatter.js",
+      "**/*.ts"
     ]
   },
   "remarkConfig": {
