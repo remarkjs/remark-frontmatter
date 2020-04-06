@@ -43,13 +43,13 @@
     "not": "^0.1.0",
     "nyc": "^15.0.0",
     "prettier": "^2.0.0",
-    "remark": "^11.0.0",
-    "remark-cli": "^7.0.0",
-    "remark-preset-wooorm": "^6.0.0",
+    "remark": "^12.0.0",
+    "remark-cli": "^8.0.0",
+    "remark-preset-wooorm": "^7.0.0",
     "tape": "^4.0.0",
     "tinyify": "^2.0.0",
     "to-vfile": "^6.0.0",
-    "unified": "^8.0.0",
+    "unified": "^9.0.0",
     "xo": "^0.28.0"
   },
   "scripts": {
