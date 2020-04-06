@@ -1,6 +1,5 @@
 'use strict'
 
-var xtend = require('xtend')
 var matters = require('./lib/matters')
 var parse = require('./lib/parse')
 var compile = require('./lib/compile')
@@ -32,12 +31,12 @@ function attachParser(parser, matters) {
   }
 
   proto.blockMethods = names.concat(proto.blockMethods)
-  proto.blockTokenizers = xtend(tokenizers, proto.blockTokenizers)
+  proto.blockTokenizers = Object.assign({}, tokenizers, proto.blockTokenizers)
 }
 
 function attachCompiler(compiler, matters) {
   var proto = compiler.prototype
-  proto.visitors = xtend(wrap(compile, matters), proto.visitors)
+  proto.visitors = Object.assign({}, wrap(compile, matters), proto.visitors)
 }
 
 function wrap(func, matters) {
