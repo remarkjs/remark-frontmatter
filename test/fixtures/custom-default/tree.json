@@ -34,10 +34,7 @@
               "column": 2,
               "offset": 27
             },
-            "indent": [
-              1,
-              1
-            ]
+            "indent": [1, 1]
           }
         }
       ],
@@ -52,10 +49,7 @@
           "column": 2,
           "offset": 27
         },
-        "indent": [
-          1,
-          1
-        ]
+        "indent": [1, 1]
       }
     },
     {
