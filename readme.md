@@ -226,7 +226,7 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/remarkjs/remark-frontmatter/master.svg
+[build-badge]: https://img.shields.io/travis/remarkjs/remark-frontmatter/main.svg
 
 [build]: https://travis-ci.org/remarkjs/remark-frontmatter
 
@@ -256,11 +256,11 @@ abide by its terms.
 
 [health]: https://github.com/remarkjs/.github
 
-[contributing]: https://github.com/remarkjs/.github/blob/master/contributing.md
+[contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
 
-[support]: https://github.com/remarkjs/.github/blob/master/support.md
+[support]: https://github.com/remarkjs/.github/blob/HEAD/support.md
 
-[coc]: https://github.com/remarkjs/.github/blob/master/code-of-conduct.md
+[coc]: https://github.com/remarkjs/.github/blob/HEAD/code-of-conduct.md
 
 [license]: license
 
@@ -268,13 +268,13 @@ abide by its terms.
 
 [remark]: https://github.com/remarkjs/remark
 
-[parse]: https://github.com/remarkjs/remark/tree/master/packages/remark-parse
+[parse]: https://github.com/remarkjs/remark/tree/HEAD/packages/remark-parse
 
-[tokenizers]: https://github.com/remarkjs/remark/tree/master/packages/remark-parse#parserblocktokenizers
+[tokenizers]: https://github.com/remarkjs/remark/tree/HEAD/packages/remark-parse#parserblocktokenizers
 
-[stringify]: https://github.com/remarkjs/remark/tree/master/packages/remark-stringify
+[stringify]: https://github.com/remarkjs/remark/tree/HEAD/packages/remark-stringify
 
-[visitors]: https://github.com/remarkjs/remark/tree/master/packages/remark-stringify#compilervisitors
+[visitors]: https://github.com/remarkjs/remark/tree/HEAD/packages/remark-stringify#compilervisitors
 
 [processor]: https://github.com/unifiedjs/unified#processor
 
