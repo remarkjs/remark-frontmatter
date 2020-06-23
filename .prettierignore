@@ -1,4 +1,5 @@
 coverage/
 remark-frontmatter.js
 remark-frontmatter.min.js
+*.json
 *.md

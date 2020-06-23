@@ -89,7 +89,7 @@ test('fixtures', function (t) {
       } catch (_) {}
 
       proc = remark().use(frontmatter, config)
-      actual = proc.parse(input)
+      actual = JSON.parse(JSON.stringify(proc.parse(input)))
 
       try {
         output = read(outputPath, 'utf8')

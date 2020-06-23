@@ -45,14 +45,14 @@
     "remark": "^12.0.0",
     "remark-cli": "^8.0.0",
     "remark-preset-wooorm": "^7.0.0",
-    "tape": "^4.0.0",
+    "tape": "^5.0.0",
     "tinyify": "^2.0.0",
     "to-vfile": "^6.0.0",
     "unified": "^9.0.0",
-    "xo": "^0.28.0"
+    "xo": "^0.32.0"
   },
   "scripts": {
-    "format": "remark *.md -qfo && prettier --write . && xo --fix",
+    "format": "remark . -qfo --ignore-pattern test/ && prettier . --write && xo --fix",
     "build-bundle": "browserify . -s remarkFrontmatter > remark-frontmatter.js",
     "build-mangle": "browserify . -s remarkFrontmatter -p tinyify > remark-frontmatter.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
@@ -79,11 +79,13 @@
     "prettier": true,
     "esnext": false,
     "rules": {
+      "unicorn/no-fn-reference-in-iterator": "off",
+      "unicorn/prefer-optional-catch-binding": "off",
       "guard-for-in": "off"
     },
     "ignores": [
-      "remark-frontmatter.js",
-      "**/*.ts"
+      "types/",
+      "remark-frontmatter.js"
     ]
   },
   "remarkConfig": {
