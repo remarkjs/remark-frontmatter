@@ -1,6 +1,6 @@
 # Two horizontal rules
 
-* * *
+***
 
 ## A horizontal rule
 

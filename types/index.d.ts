@@ -37,7 +37,7 @@ declare namespace remarkFrontmatter {
     fence?: string | Fence
 
     /**
-     * if `true`, matter can be found anywhere in the document.
+     * If `true`, matter can be found anywhere in the document.
      * If `false` (default), only matter at the start of the document is recognized
      *
      * @default false

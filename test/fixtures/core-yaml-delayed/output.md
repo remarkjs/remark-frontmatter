@@ -1,5 +1,5 @@
----
-title: post
----
+***
+
+## title: post
 
 # Later (whitespace before yaml)

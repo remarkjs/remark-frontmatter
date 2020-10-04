@@ -1,9 +1,9 @@
-* * *
+***
 
 {
-  "hello": "World!"
+"hello": "World!"
 }
 
-* * *
+***
 
 # Default

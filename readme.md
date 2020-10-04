@@ -10,6 +10,14 @@
 
 [**remark**][remark] plugin to support frontmatter (YAML, TOML, and more).
 
+## Important!
+
+This plugin is affected by the new parser in remark
+([`micromark`](https://github.com/micromark/micromark),
+see [`remarkjs/remark#536`](https://github.com/remarkjs/remark/pull/536)).
+Use version 2 while you’re still on remark 12.
+Use version 3 for remark 13+.
+
 ## Install
 
 [npm][]:
@@ -45,9 +53,9 @@ unified()
   .use(stringify)
   .use(frontmatter, ['yaml', 'toml'])
   .use(logger)
-  .process(vfile.readSync('example.md'), function(err, file) {
-    console.log(String(file))
+  .process(vfile.readSync('example.md'), function (err, file) {
     console.error(report(err || file))
+    console.log(String(file))
   })
 
 function logger() {
@@ -58,16 +66,17 @@ function logger() {
 Now, running `node example` yields:
 
 ```js
-{ type: 'root',
-  children:
-   [ { type: 'toml',
-       value: 'title = "New Website"',
-       position: [Object] },
-     { type: 'heading',
-       depth: 1,
-       children: [Array],
-       position: [Object] } ],
-  position: [Object] }
+{
+  type: 'root',
+  children: [
+    {type: 'toml', value: 'title = "New Website"', position: [Object]},
+    {type: 'heading', depth: 1, children: [Array], position: [Object]}
+  ],
+  position: {
+    start: {line: 1, column: 1, offset: 0},
+    end: {line: 6, column: 1, offset: 48}
+  }
+}
 ```
 
 ```markdown
@@ -83,117 +92,12 @@ title = "New Website"
 
 ### `remark().use(frontmatter[, options])`
 
-Support frontmatter (YAML, TOML, and more).
-Adds [tokenizers][] if the [processor][] is configured with
-[`remark-parse`][parse], and [visitors][] if configured with
-[`remark-stringify`][stringify].
-
-If you are parsing from a different syntax, or compiling to a different syntax
-(such as, [`remark-man`][man]) your custom nodes may not be supported.
+Configures remark so that it can parse and serialize frontmatter (YAML, TOML,
+and more).
 
 ##### `options`
 
-One [`preset`][preset] or [`Matter`][matter], or an array of them, defining all
-the supported frontmatters (default: `'yaml'`).
-
-##### `preset`
-
-Either `'yaml'` or `'toml'`:
-
-*   `'yaml'` — [`matter`][matter] defined as `{type: 'yaml', marker: '-'}`
-*   `'toml'` — [`matter`][matter] defined as `{type: 'toml', marker: '+'}`
-
-##### `Matter`
-
-An object with a `type` and either a `marker` or a `fence`:
-
-*   `type` (`string`)
-    — Node type to parse to in [mdast][] and compile from
-*   `marker` (`string` or `{open: string, close: string}`)
-    — Character used to construct fences.
-    By providing an object with `open` and `close`.
-    different characters can be used for opening and closing fences.
-    For example the character `'-'` will result in `'---'` being used as the
-    fence
-*   `fence` (`string` or `{open: string, close: string}`)
-    — String used as the complete fence.
-    By providing an object with `open` and `close` different values can be used
-    for opening and closing fences.
-    This can be used too if fences contain different characters or lengths other
-    than 3
-*   `anywhere` (`boolean`, default: `false`)
-    – if `true`, matter can be found anywhere in the document.
-    If `false` (default), only matter at the start of the document is recognized
-
-###### Example
-
-For `{type: 'yaml', marker: '-'}`:
-
-```yaml
----
-key: value
----
-```
-
-Yields:
-
-```json
-{
-  "type": "yaml",
-  "value": "key: value"
-}
-```
-
-For `{type: 'custom', marker: {open: '<', close: '>'}}`:
-
-```text
-<<<
-data
->>>
-```
-
-Yields:
-
-```json
-{
-  "type": "custom",
-  "value": "data"
-}
-```
-
-For `{type: 'custom', fence: '+=+=+=+'}`:
-
-```text
-+=+=+=+
-data
-+=+=+=+
-```
-
-Yields:
-
-```json
-{
-  "type": "custom",
-  "value": "data"
-}
-```
-
-For `{type: 'json', fence: {open: '{', close: '}'}}`:
-
-```json
-{
-  "key": "value"
-}
-```
-
-Yields:
-
-```json
-{
-  "type": "json",
-  "value": "\"key\": \"value\""
-}
-```
+See [`micromark-extension-frontmatter`][options] for a description of `options`.
 
 ## Security
 
@@ -203,10 +107,14 @@ Use of `remark-frontmatter` does not involve [**rehype**][rehype]
 
 ## Related
 
+*   [`remark-gfm`](https://github.com/remarkjs/remark-gfm)
+    — GitHub Flavored Markdown
+*   [`remark-footnotes`](https://github.com/remarkjs/remark-footnotes)
+    — Footnotes
+*   [`remark-math`](https://github.com/remarkjs/remark-math)
+    — Math
 *   [`remark-github`](https://github.com/remarkjs/remark-github)
     — Auto-link references like in GitHub issues, PRs, and comments
-*   [`remark-math`](https://github.com/rokt33r/remark-math)
-    — Math support
 *   [`remark-yaml-config`](https://github.com/remarkjs/remark-yaml-config)
     — Configure remark from YAML configuration
 
@@ -268,26 +176,10 @@ abide by its terms.
 
 [remark]: https://github.com/remarkjs/remark
 
-[parse]: https://github.com/remarkjs/remark/tree/HEAD/packages/remark-parse
-
-[tokenizers]: https://github.com/remarkjs/remark/tree/HEAD/packages/remark-parse#parserblocktokenizers
-
-[stringify]: https://github.com/remarkjs/remark/tree/HEAD/packages/remark-stringify
-
-[visitors]: https://github.com/remarkjs/remark/tree/HEAD/packages/remark-stringify#compilervisitors
-
-[processor]: https://github.com/unifiedjs/unified#processor
-
-[mdast]: https://github.com/syntax-tree/mdast
-
-[man]: https://github.com/remarkjs/remark-man
-
-[preset]: #preset
-
-[matter]: #matter
-
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
 
 [rehype]: https://github.com/rehypejs/rehype
 
 [hast]: https://github.com/syntax-tree/hast
+
+[options]: https://github.com/micromark/micromark-extension-frontmatter#options
