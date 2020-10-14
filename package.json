@@ -36,15 +36,15 @@
     "micromark-extension-frontmatter": "^0.2.0"
   },
   "devDependencies": {
-    "browserify": "^16.0.0",
+    "browserify": "^17.0.0",
     "dtslint": "^4.0.0",
     "is-hidden": "^1.0.0",
     "not": "^0.1.0",
     "nyc": "^15.0.0",
     "prettier": "^2.0.0",
-    "remark": "^13.0.0-alpha.1",
-    "remark-cli": "^8.0.0",
-    "remark-preset-wooorm": "^7.0.0",
+    "remark": "^13.0.0",
+    "remark-cli": "^9.0.0",
+    "remark-preset-wooorm": "^8.0.0",
     "tape": "^5.0.0",
     "tinyify": "^3.0.0",
     "to-vfile": "^6.0.0",
@@ -52,7 +52,7 @@
     "xo": "^0.33.0"
   },
   "scripts": {
-    "format": "remark . -qfo --ignore-pattern test/ && prettier . --write && xo --fix",
+    "format": "remark . -qfo --ignore-pattern test/ && prettier . -w --loglevel warn && xo --fix",
     "build-bundle": "browserify . -s remarkFrontmatter > remark-frontmatter.js",
     "build-mangle": "browserify . -s remarkFrontmatter -p tinyify > remark-frontmatter.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
