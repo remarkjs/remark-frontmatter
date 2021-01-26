@@ -26,6 +26,7 @@
     "Lars Trieloff <lars@trieloff.net>",
     "Max Kueng <me@maxkueng.com>"
   ],
+  "main": "index.js",
   "files": [
     "index.js",
     "types/index.d.ts"
