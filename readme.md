@@ -134,9 +134,9 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/remarkjs/remark-frontmatter/main.svg
+[build-badge]: https://github.com/remarkjs/remark-frontmatter/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/remarkjs/remark-frontmatter
+[build]: https://github.com/remarkjs/remark-frontmatter/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/remarkjs/remark-frontmatter.svg
 
