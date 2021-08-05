@@ -1,16 +1,17 @@
+/**
+ * @typedef {import('vfile').VFile} VFile
+ * @typedef {import('mdast').Root} Root
+ * @typedef {import('../index.js').Options} Options
+ */
+
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
-import {readSync} from 'to-vfile'
+import {readSync, writeSync} from 'to-vfile'
 import {unified} from 'unified'
 import {remark} from 'remark'
 import {isHidden} from 'is-hidden'
 import remarkFrontmatter from '../index.js'
-
-const join = path.join
-const read = fs.readFileSync
-const write = fs.writeFileSync
-const dir = fs.readdirSync
 
 test('remarkFrontmatter', (t) => {
   t.doesNotThrow(() => {
@@ -23,6 +24,7 @@ test('remarkFrontmatter', (t) => {
 
   t.throws(
     () => {
+      // @ts-expect-error: invalid input.
       unified().use(remarkFrontmatter, [1]).freeze()
     },
     /^Error: Expected matter to be an object, not `1`/,
@@ -31,6 +33,7 @@ test('remarkFrontmatter', (t) => {
 
   t.throws(
     () => {
+      // @ts-expect-error: invalid input.
       unified().use(remarkFrontmatter, ['jsonml']).freeze()
     },
     /^Error: Missing matter definition for `jsonml`/,
@@ -40,6 +43,7 @@ test('remarkFrontmatter', (t) => {
   t.throws(
     () => {
       unified()
+        // @ts-expect-error: invalid input.
         .use(remarkFrontmatter, [{marker: '*'}])
         .freeze()
     },
@@ -50,6 +54,7 @@ test('remarkFrontmatter', (t) => {
   t.throws(
     () => {
       unified()
+        // @ts-expect-error: invalid input.
         .use(remarkFrontmatter, [{type: 'jsonml'}])
         .freeze()
     },
@@ -61,8 +66,8 @@ test('remarkFrontmatter', (t) => {
 })
 
 test('fixtures', (t) => {
-  const base = join('test', 'fixtures')
-  const entries = dir(base).filter((d) => !isHidden(d))
+  const base = path.join('test', 'fixtures')
+  const entries = fs.readdirSync(base).filter((d) => !isHidden(d))
   let index = -1
 
   t.plan(entries.length)
@@ -70,36 +75,44 @@ test('fixtures', (t) => {
   while (++index < entries.length) {
     const fixture = entries[index]
     t.test(fixture, (st) => {
-      const input = readSync(join(base, fixture, 'input.md'))
-      const treePath = join(base, fixture, 'tree.json')
-      const outputPath = join(base, fixture, 'output.md')
+      const input = readSync(path.join(base, fixture, 'input.md'))
+      const treePath = path.join(base, fixture, 'tree.json')
+      const outputPath = path.join(base, fixture, 'output.md')
+      /** @type {VFile} */
       let output
+      /** @type {Root} */
       let expected
+      /** @type {Options|undefined} */
       let config
 
       try {
-        config = JSON.parse(read(join(base, fixture, 'config.json')))
+        config = JSON.parse(
+          String(readSync(path.join(base, fixture, 'config.json')))
+        )
       } catch {}
 
       const proc = remark().use(remarkFrontmatter, config)
-      const actual = JSON.parse(JSON.stringify(proc.parse(input)))
+      const actual = proc.parse(input)
 
       try {
-        output = read(outputPath, 'utf8')
+        output = readSync(outputPath)
       } catch {
-        output = String(input)
+        output = input
       }
 
       try {
-        expected = JSON.parse(read(treePath))
+        expected = JSON.parse(String(readSync(treePath)))
       } catch {
         // New fixture.
-        write(treePath, JSON.stringify(actual, 0, 2) + '\n')
+        writeSync({
+          path: treePath,
+          value: JSON.stringify(actual, null, 2) + '\n'
+        })
         expected = actual
       }
 
       st.deepEqual(actual, expected, 'tree')
-      st.equal(String(proc.processSync(input)), output, 'process')
+      st.equal(String(proc.processSync(input)), String(output), 'process')
       st.end()
     })
   }
