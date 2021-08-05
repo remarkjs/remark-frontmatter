@@ -20,6 +20,9 @@ Use version 3 for remark 13+.
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -38,29 +41,30 @@ title = "New Website"
 # Other markdown
 ```
 
-And our script, `example.js`, looks as follows:
+And our module, `example.js`, looks as follows:
 
 ```js
-var vfile = require('to-vfile')
-var report = require('vfile-reporter')
-var unified = require('unified')
-var parse = require('remark-parse')
-var stringify = require('remark-stringify')
-var frontmatter = require('remark-frontmatter')
+import {readSync} from 'to-vfile'
+import {reporter} from 'vfile-reporter'
+import {unified} from 'unified'
+import remarkParse from 'remark-parse'
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkStringify from 'remark-stringify'
+
+const file = readSync('example.md')
 
 unified()
-  .use(parse)
-  .use(stringify)
-  .use(frontmatter, ['yaml', 'toml'])
-  .use(logger)
-  .process(vfile.readSync('example.md'), function (err, file) {
-    console.error(report(err || file))
+  .use(remarkParse)
+  .use(remarkStringify)
+  .use(remarkFrontmatter, ['yaml', 'toml'])
+  .use(() => (tree) => {
+    console.dir(tree)
+  })
+  .process(file)
+  .then((file) => {
+    console.error(reporter(file))
     console.log(String(file))
   })
-
-function logger() {
-  return console.dir
-}
 ```
 
 Now, running `node example` yields:
@@ -90,7 +94,10 @@ title = "New Website"
 
 ## API
 
-### `remark().use(frontmatter[, options])`
+This package exports no identifiers.
+The default export is `remarkFrontmatter`.
+
+### `unified().use(remarkFrontmatter[, options])`
 
 Configures remark so that it can parse and serialize frontmatter (YAML, TOML,
 and more).
