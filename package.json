@@ -36,7 +36,6 @@
     "micromark-extension-frontmatter": "^0.2.0"
   },
   "devDependencies": {
-    "browserify": "^17.0.0",
     "dtslint": "^4.0.0",
     "is-hidden": "^1.0.0",
     "not": "^0.1.0",
@@ -46,20 +45,16 @@
     "remark-cli": "^9.0.0",
     "remark-preset-wooorm": "^8.0.0",
     "tape": "^5.0.0",
-    "tinyify": "^3.0.0",
     "to-vfile": "^6.0.0",
     "unified": "^9.0.0",
     "xo": "^0.37.0"
   },
   "scripts": {
     "format": "remark . -qfo --ignore-pattern test/ && prettier . -w --loglevel warn && xo --fix",
-    "build-bundle": "browserify . -s remarkFrontmatter > remark-frontmatter.js",
-    "build-mangle": "browserify . -s remarkFrontmatter -p tinyify > remark-frontmatter.min.js",
-    "build": "npm run build-bundle && npm run build-mangle",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
     "test-types": "dtslint types",
-    "test": "npm run format && npm run build && npm run test-coverage && npm run test-types"
+    "test": "npm run format && npm run test-coverage"
   },
   "nyc": {
     "check-coverage": true,
@@ -84,8 +79,7 @@
       "guard-for-in": "off"
     },
     "ignores": [
-      "types/",
-      "remark-frontmatter.js"
+      "types/"
     ]
   },
   "remarkConfig": {
