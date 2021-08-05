@@ -1,14 +1,12 @@
-'use strict'
-
-var fs = require('fs')
-var path = require('path')
-var test = require('tape')
-var vfile = require('to-vfile')
-var unified = require('unified')
-var remark = require('remark')
-var not = require('not')
-var hidden = require('is-hidden')
-var frontmatter = require('..')
+import fs from 'fs'
+import path from 'path'
+import test from 'tape'
+import vfile from 'to-vfile'
+import unified from 'unified'
+import remark from 'remark'
+import not from 'not'
+import hidden from 'is-hidden'
+import frontmatter from '../index.js'
 
 var join = path.join
 var read = fs.readFileSync
@@ -66,7 +64,7 @@ test('frontmatter()', function (t) {
 })
 
 test('fixtures', function (t) {
-  var base = join(__dirname, 'fixtures')
+  var base = join('test', 'fixtures')
   var entries = dir(base).filter(not(hidden))
 
   t.plan(entries.length)

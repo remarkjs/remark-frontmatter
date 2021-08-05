@@ -1,12 +1,8 @@
-'use strict'
+import syntax from 'micromark-extension-frontmatter'
+import fromMarkdown from 'mdast-util-frontmatter/from-markdown.js'
+import toMarkdown from 'mdast-util-frontmatter/to-markdown.js'
 
-var syntax = require('micromark-extension-frontmatter')
-var fromMarkdown = require('mdast-util-frontmatter/from-markdown')
-var toMarkdown = require('mdast-util-frontmatter/to-markdown')
-
-module.exports = frontmatter
-
-function frontmatter(options) {
+export default function remarkFrontmatter(options) {
   var data = this.data()
   add('micromarkExtensions', syntax(options))
   add('fromMarkdownExtensions', fromMarkdown(options))
