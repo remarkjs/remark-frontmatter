@@ -1,32 +1,29 @@
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
-import vfile from 'to-vfile'
-import unified from 'unified'
-import remark from 'remark'
-import not from 'not'
-import hidden from 'is-hidden'
-import frontmatter from '../index.js'
+import {readSync} from 'to-vfile'
+import {unified} from 'unified'
+import {remark} from 'remark'
+import {isHidden} from 'is-hidden'
+import remarkFrontmatter from '../index.js'
 
 var join = path.join
 var read = fs.readFileSync
 var write = fs.writeFileSync
 var dir = fs.readdirSync
 
-test('frontmatter()', function (t) {
-  t.equal(typeof frontmatter, 'function', 'should be a function')
-
+test('remarkFrontmatter', function (t) {
   t.doesNotThrow(function () {
-    remark().use(frontmatter).freeze()
+    remark().use(remarkFrontmatter).freeze()
   }, 'should not throw if not passed options')
 
   t.doesNotThrow(function () {
-    unified().use(frontmatter).freeze()
+    unified().use(remarkFrontmatter).freeze()
   }, 'should not throw if without parser or compiler')
 
   t.throws(
     function () {
-      unified().use(frontmatter, [1]).freeze()
+      unified().use(remarkFrontmatter, [1]).freeze()
     },
     /^Error: Expected matter to be an object, not `1`/,
     'should throw if not given a preset or a matter'
@@ -34,7 +31,7 @@ test('frontmatter()', function (t) {
 
   t.throws(
     function () {
-      unified().use(frontmatter, ['jsonml']).freeze()
+      unified().use(remarkFrontmatter, ['jsonml']).freeze()
     },
     /^Error: Missing matter definition for `jsonml`/,
     'should throw if given an unknown preset'
@@ -43,7 +40,7 @@ test('frontmatter()', function (t) {
   t.throws(
     function () {
       unified()
-        .use(frontmatter, [{marker: '*'}])
+        .use(remarkFrontmatter, [{marker: '*'}])
         .freeze()
     },
     /^Error: Missing `type` in matter `{"marker":"\*"}`/,
@@ -53,7 +50,7 @@ test('frontmatter()', function (t) {
   t.throws(
     function () {
       unified()
-        .use(frontmatter, [{type: 'jsonml'}])
+        .use(remarkFrontmatter, [{type: 'jsonml'}])
         .freeze()
     },
     /^Error: Missing `marker` or `fence` in matter `{"type":"jsonml"}`/,
@@ -65,7 +62,7 @@ test('frontmatter()', function (t) {
 
 test('fixtures', function (t) {
   var base = join('test', 'fixtures')
-  var entries = dir(base).filter(not(hidden))
+  var entries = dir(base).filter((d) => !isHidden(d))
 
   t.plan(entries.length)
 
@@ -73,7 +70,7 @@ test('fixtures', function (t) {
 
   function each(fixture) {
     t.test(fixture, function (st) {
-      var input = vfile.readSync(join(base, fixture, 'input.md'))
+      var input = readSync(join(base, fixture, 'input.md'))
       var treePath = join(base, fixture, 'tree.json')
       var outputPath = join(base, fixture, 'output.md')
       var output
@@ -86,7 +83,7 @@ test('fixtures', function (t) {
         config = JSON.parse(read(join(base, fixture, 'config.json')))
       } catch (_) {}
 
-      proc = remark().use(frontmatter, config)
+      proc = remark().use(remarkFrontmatter, config)
       actual = JSON.parse(JSON.stringify(proc.parse(input)))
 
       try {
