@@ -5,7 +5,7 @@ import {
 } from 'mdast-util-frontmatter'
 
 export default function remarkFrontmatter(options) {
-  var data = this.data()
+  const data = this.data()
   add('micromarkExtensions', frontmatter(options))
   add('fromMarkdownExtensions', frontmatterFromMarkdown(options))
   add('toMarkdownExtensions', frontmatterToMarkdown(options))

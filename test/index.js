@@ -7,22 +7,22 @@ import {remark} from 'remark'
 import {isHidden} from 'is-hidden'
 import remarkFrontmatter from '../index.js'
 
-var join = path.join
-var read = fs.readFileSync
-var write = fs.writeFileSync
-var dir = fs.readdirSync
+const join = path.join
+const read = fs.readFileSync
+const write = fs.writeFileSync
+const dir = fs.readdirSync
 
-test('remarkFrontmatter', function (t) {
-  t.doesNotThrow(function () {
+test('remarkFrontmatter', (t) => {
+  t.doesNotThrow(() => {
     remark().use(remarkFrontmatter).freeze()
   }, 'should not throw if not passed options')
 
-  t.doesNotThrow(function () {
+  t.doesNotThrow(() => {
     unified().use(remarkFrontmatter).freeze()
   }, 'should not throw if without parser or compiler')
 
   t.throws(
-    function () {
+    () => {
       unified().use(remarkFrontmatter, [1]).freeze()
     },
     /^Error: Expected matter to be an object, not `1`/,
@@ -30,7 +30,7 @@ test('remarkFrontmatter', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       unified().use(remarkFrontmatter, ['jsonml']).freeze()
     },
     /^Error: Missing matter definition for `jsonml`/,
@@ -38,7 +38,7 @@ test('remarkFrontmatter', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       unified()
         .use(remarkFrontmatter, [{marker: '*'}])
         .freeze()
@@ -48,7 +48,7 @@ test('remarkFrontmatter', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       unified()
         .use(remarkFrontmatter, [{type: 'jsonml'}])
         .freeze()
@@ -60,41 +60,39 @@ test('remarkFrontmatter', function (t) {
   t.end()
 })
 
-test('fixtures', function (t) {
-  var base = join('test', 'fixtures')
-  var entries = dir(base).filter((d) => !isHidden(d))
+test('fixtures', (t) => {
+  const base = join('test', 'fixtures')
+  const entries = dir(base).filter((d) => !isHidden(d))
+  let index = -1
 
   t.plan(entries.length)
 
-  entries.forEach(each)
-
-  function each(fixture) {
-    t.test(fixture, function (st) {
-      var input = readSync(join(base, fixture, 'input.md'))
-      var treePath = join(base, fixture, 'tree.json')
-      var outputPath = join(base, fixture, 'output.md')
-      var output
-      var actual
-      var expected
-      var config
-      var proc
+  while (++index < entries.length) {
+    const fixture = entries[index]
+    t.test(fixture, (st) => {
+      const input = readSync(join(base, fixture, 'input.md'))
+      const treePath = join(base, fixture, 'tree.json')
+      const outputPath = join(base, fixture, 'output.md')
+      let output
+      let expected
+      let config
 
       try {
         config = JSON.parse(read(join(base, fixture, 'config.json')))
-      } catch (_) {}
+      } catch {}
 
-      proc = remark().use(remarkFrontmatter, config)
-      actual = JSON.parse(JSON.stringify(proc.parse(input)))
+      const proc = remark().use(remarkFrontmatter, config)
+      const actual = JSON.parse(JSON.stringify(proc.parse(input)))
 
       try {
         output = read(outputPath, 'utf8')
-      } catch (_) {
+      } catch {
         output = String(input)
       }
 
       try {
         expected = JSON.parse(read(treePath))
-      } catch (_) {
+      } catch {
         // New fixture.
         write(treePath, JSON.stringify(actual, 0, 2) + '\n')
         expected = actual
