@@ -1,12 +1,14 @@
-import syntax from 'micromark-extension-frontmatter'
-import fromMarkdown from 'mdast-util-frontmatter/from-markdown.js'
-import toMarkdown from 'mdast-util-frontmatter/to-markdown.js'
+import {frontmatter} from 'micromark-extension-frontmatter'
+import {
+  frontmatterFromMarkdown,
+  frontmatterToMarkdown
+} from 'mdast-util-frontmatter'
 
 export default function remarkFrontmatter(options) {
   var data = this.data()
-  add('micromarkExtensions', syntax(options))
-  add('fromMarkdownExtensions', fromMarkdown(options))
-  add('toMarkdownExtensions', toMarkdown(options))
+  add('micromarkExtensions', frontmatter(options))
+  add('fromMarkdownExtensions', frontmatterFromMarkdown(options))
+  add('toMarkdownExtensions', frontmatterToMarkdown(options))
   function add(field, value) {
     /* istanbul ignore if - other extensions. */
     if (data[field]) data[field].push(value)
