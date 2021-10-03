@@ -116,8 +116,6 @@ Use of `remark-frontmatter` does not involve [**rehype**][rehype]
 
 *   [`remark-gfm`](https://github.com/remarkjs/remark-gfm)
     — GitHub Flavored Markdown
-*   [`remark-footnotes`](https://github.com/remarkjs/remark-footnotes)
-    — Footnotes
 *   [`remark-math`](https://github.com/remarkjs/remark-math)
     — Math
 *   [`remark-github`](https://github.com/remarkjs/remark-github)
