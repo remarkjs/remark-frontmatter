@@ -10,23 +10,71 @@
 
 [**remark**][remark] plugin to support frontmatter (YAML, TOML, and more).
 
-## Important!
+## Contents
 
-This plugin is affected by the new parser in remark
-([`micromark`](https://github.com/micromark/micromark),
-see [`remarkjs/remark#536`](https://github.com/remarkjs/remark/pull/536)).
-Use version 2 while you’re still on remark 12.
-Use version 3 for remark 13+.
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`unified().use(remarkFrontmatter[, options])`](#unifieduseremarkfrontmatter-options)
+*   [Examples](#examples)
+    *   [Example: custom marker](#example-custom-marker)
+    *   [Example: custom fence](#example-custom-fence)
+*   [Syntax](#syntax)
+*   [Syntax tree](#syntax-tree)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Security](#security)
+*   [Related](#related)
+*   [Contribute](#contribute)
+*   [License](#license)
+
+## What is this?
+
+This package is a [unified][] ([remark][]) plugin to add support for YAML, TOML,
+and other frontmatter.
+You can use this to add support for parsing and serializing this syntax
+extension.
+
+unified is an AST (abstract syntax tree) based transform project.
+**remark** is everything unified that relates to markdown.
+The layer under remark is called mdast, which is only concerned with syntax
+trees.
+Another layer underneath is micromark, which is only concerned with parsing.
+This package is a small wrapper to integrate all of these.
+
+## When should I use this?
+
+Frontmatter is a metadata format in front of content.
+It’s typically written in YAML and is often used with markdown.
+This mechanism works well when you want authors, that have some markup
+experience, to configure where or how the content is displayed or supply
+metadata about content.
+Frontmatter does not work everywhere so it makes markdown less portable.
+A good example use case is markdown being rendered by (static) site generators.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+In Node.js (12.20+, 14.14+, 16.0+), install with [npm][]:
 
 ```sh
 npm install remark-frontmatter
+```
+
+In Deno with [Skypack][]:
+
+```js
+import remarkFrontmatter from 'https://cdn.skypack.dev/remark-frontmatter@4?dts'
+```
+
+In browsers with [Skypack][]:
+
+```html
+<script type="module">
+  import remarkFrontmatter from 'https://cdn.skypack.dev/remark-frontmatter@4?min'
+</script>
 ```
 
 ## Use
@@ -44,27 +92,26 @@ title = "New Website"
 And our module, `example.js`, looks as follows:
 
 ```js
-import {readSync} from 'to-vfile'
-import {reporter} from 'vfile-reporter'
+import {read} from 'to-vfile'
 import {unified} from 'unified'
 import remarkParse from 'remark-parse'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkStringify from 'remark-stringify'
 
-const file = readSync('example.md')
+main()
 
-unified()
-  .use(remarkParse)
-  .use(remarkStringify)
-  .use(remarkFrontmatter, ['yaml', 'toml'])
-  .use(() => (tree) => {
-    console.dir(tree)
-  })
-  .process(file)
-  .then((file) => {
-    console.error(reporter(file))
-    console.log(String(file))
-  })
+async function main() {
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkStringify)
+    .use(remarkFrontmatter, ['yaml', 'toml'])
+    .use(() => (tree) => {
+      console.dir(tree)
+    })
+    .process(await read('example.md'))
+
+  console.log(String(file))
+}
 ```
 
 Now, running `node example` yields:
@@ -84,7 +131,6 @@ Now, running `node example` yields:
 ```
 
 ```markdown
-example.md: no issues found
 +++
 title = "New Website"
 +++
@@ -101,10 +147,134 @@ The default export is `remarkFrontmatter`.
 
 Configures remark so that it can parse and serialize frontmatter (YAML, TOML,
 and more).
+Doesn’t parse the data inside them: [create your own plugin][create-plugin] to
+do that.
 
 ##### `options`
 
-See [`micromark-extension-frontmatter`][options] for a description of `options`.
+One `preset` or `Matter`, or an array of them, defining all the supported
+frontmatters (default: `'yaml'`).
+
+##### `preset`
+
+Either `'yaml'` or `'toml'`:
+
+*   `'yaml'` — `Matter` defined as `{type: 'yaml', marker: '-'}`
+*   `'toml'` — `Matter` defined as `{type: 'toml', marker: '+'}`
+
+##### `Matter`
+
+An object with a `type` and either a `marker` or a `fence`:
+
+*   `type` (`string`)
+    — Type to tokenize as
+*   `marker` (`string` or `{open: string, close: string}`)
+    — Character used to construct fences.
+    By providing an object with `open` and `close` different characters can be
+    used for opening and closing fences.
+    For example the character `'-'` will result in `'---'` being used as the
+    fence
+*   `fence` (`string` or `{open: string, close: string}`)
+    — String used as the complete fence.
+    By providing an object with `open` and `close` different values can be used
+    for opening and closing fences.
+    This can be used too if fences contain different characters or lengths other
+    than 3
+*   `anywhere` (`boolean`, default: `false`)
+    – if `true`, matter can be found anywhere in the document.
+    If `false` (default), only matter at the start of the document is recognized
+
+## Examples
+
+### Example: custom marker
+
+A custom frontmatter with different open and close markers, repeated 3 times,
+that looks like this:
+
+```text
+<<<
+data
+>>>
+
+# hi
+```
+
+…can be supported with:
+
+```js
+// …
+.use(remarkFrontmatter, {type: 'custom', marker: {open: '<', close: '>'}})
+// …
+```
+
+### Example: custom fence
+
+A custom frontmatter with custom fences that are not repeated like this:
+
+```text
+{
+  "key": "value"
+}
+
+# hi
+```
+
+…can be supported with:
+
+```js
+// …
+.use(remarkFrontmatter, {type: 'json', fence: {open: '{', close: '}'}})
+// …
+```
+
+## Syntax
+
+This plugin applies a micromark extensions to parse the syntax.
+See its readme for how it works:
+
+*   [`micromark-extension-frontmatter`](https://github.com/micromark/micromark-extension-frontmatter)
+
+The syntax supported depends on the given configuration.
+
+## Syntax tree
+
+This plugin applies one mdast utility to build and serialize the AST.
+See its readme for how it works:
+
+*   [`mdast-util-frontmatter`](https://github.com/syntax-tree/mdast-util-directive)
+
+The node types supported in the tree depend on the given configuration.
+
+## Types
+
+This package is fully typed with [TypeScript][].
+The YAML node type is supported in `@types/mdast` by default.
+To add other node types, register them by adding them to
+`FrontmatterContentMap`:
+
+```ts
+import type {Literal} from 'mdast'
+
+interface TOML extends Literal {
+  type: 'toml'
+}
+
+declare module 'mdast' {
+  interface FrontmatterContentMap {
+    // Allow using toml nodes defined by `remark-frontmatter`.
+    toml: TOML
+  }
+}
+```
+
+## Compatibility
+
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
+
+This plugin works with unified 6+ and remark 13+.
 
 ## Security
 
@@ -167,6 +337,8 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[skypack]: https://www.skypack.dev
+
 [health]: https://github.com/remarkjs/.github
 
 [contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
@@ -179,12 +351,16 @@ abide by its terms.
 
 [author]: https://wooorm.com
 
+[unified]: https://github.com/unifiedjs/unified
+
 [remark]: https://github.com/remarkjs/remark
 
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[typescript]: https://www.typescriptlang.org
 
 [rehype]: https://github.com/rehypejs/rehype
 
 [hast]: https://github.com/syntax-tree/hast
 
-[options]: https://github.com/micromark/micromark-extension-frontmatter#options
+[create-plugin]: https://unifiedjs.com/learn/guide/create-a-plugin/
