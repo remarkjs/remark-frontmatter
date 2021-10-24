@@ -284,14 +284,17 @@ Use of `remark-frontmatter` does not involve [**rehype**][rehype]
 
 ## Related
 
-*   [`remark-gfm`](https://github.com/remarkjs/remark-gfm)
-    — GitHub Flavored Markdown
-*   [`remark-math`](https://github.com/remarkjs/remark-math)
-    — Math
-*   [`remark-github`](https://github.com/remarkjs/remark-github)
-    — Auto-link references like in GitHub issues, PRs, and comments
 *   [`remark-yaml-config`](https://github.com/remarkjs/remark-yaml-config)
-    — Configure remark from YAML configuration
+    — configure remark from YAML configuration
+*   [`remark-gfm`](https://github.com/remarkjs/remark-gfm)
+    — support GFM (autolink literals, strikethrough, tables, tasklists)
+*   [`remark-github`](https://github.com/remarkjs/remark-github)
+    — link references to commits, issues, pull-requests, and users, like on
+    GitHub
+*   [`remark-directive`](https://github.com/remarkjs/remark-directive)
+    — support directives
+*   [`remark-math`](https://github.com/remarkjs/remark-math)
+    — support math
 
 ## Contribute
 
