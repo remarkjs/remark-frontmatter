@@ -41,7 +41,7 @@ extension.
 (ASTs).
 **remark** adds support for markdown to unified.
 **mdast** is the markdown AST that remark uses.
-**micromark** is the markdown we use.
+**micromark** is the markdown parser we use.
 This is a remark plugin that adds support for the frontmatter syntax and AST to
 remark.
 
