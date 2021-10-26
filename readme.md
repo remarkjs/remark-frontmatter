@@ -287,7 +287,8 @@ Use of `remark-frontmatter` does not involve [**rehype**][rehype]
 *   [`remark-yaml-config`](https://github.com/remarkjs/remark-yaml-config)
     — configure remark from YAML configuration
 *   [`remark-gfm`](https://github.com/remarkjs/remark-gfm)
-    — support GFM (autolink literals, strikethrough, tables, tasklists)
+    — support GFM (autolink literals, footnotes, strikethrough, tables,
+    tasklists)
 *   [`remark-github`](https://github.com/remarkjs/remark-github)
     — link references to commits, issues, pull-requests, and users, like on
     GitHub
