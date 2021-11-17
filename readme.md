@@ -290,9 +290,8 @@ Use of `remark-frontmatter` does not involve [**rehype**][rehype]
 *   [`remark-gfm`](https://github.com/remarkjs/remark-gfm)
     — support GFM (autolink literals, footnotes, strikethrough, tables,
     tasklists)
-*   [`remark-github`](https://github.com/remarkjs/remark-github)
-    — link references to commits, issues, pull-requests, and users, like on
-    GitHub
+*   [`remark-mdx`](https://github.com/mdx-js/mdx/tree/main/packages/mdx)
+    — support MDX (JSX, expressions, ESM)
 *   [`remark-directive`](https://github.com/remarkjs/remark-directive)
     — support directives
 *   [`remark-math`](https://github.com/remarkjs/remark-math)
