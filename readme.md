@@ -242,7 +242,7 @@ The syntax supported depends on the given configuration.
 This plugin applies one mdast utility to build and serialize the AST.
 See its readme for how it works:
 
-*   [`mdast-util-frontmatter`](https://github.com/syntax-tree/mdast-util-directive)
+*   [`mdast-util-frontmatter`](https://github.com/syntax-tree/mdast-util-frontmatter)
 
 The node types supported in the tree depend on the given configuration.
 
