@@ -72,6 +72,9 @@
   },
   "xo": {
     "prettier": true,
+    "rules": {
+      "unicorn/prefer-logical-operator-over-ternary": "off"
+    },
     "ignores": [
       "types/"
     ]
