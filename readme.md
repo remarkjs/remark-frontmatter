@@ -21,6 +21,8 @@
 *   [Examples](#examples)
     *   [Example: custom marker](#example-custom-marker)
     *   [Example: custom fence](#example-custom-fence)
+    *   [Example: frontmatter as metadata](#example-frontmatter-as-metadata)
+    *   [Example: frontmatter in MDX](#example-frontmatter-in-mdx)
 *   [Syntax](#syntax)
 *   [Syntax tree](#syntax-tree)
 *   [Types](#types)
@@ -99,20 +101,16 @@ import remarkParse from 'remark-parse'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkStringify from 'remark-stringify'
 
-main()
+const file = await unified()
+  .use(remarkParse)
+  .use(remarkStringify)
+  .use(remarkFrontmatter, ['yaml', 'toml'])
+  .use(() => (tree) => {
+    console.dir(tree)
+  })
+  .process(await read('example.md'))
 
-async function main() {
-  const file = await unified()
-    .use(remarkParse)
-    .use(remarkStringify)
-    .use(remarkFrontmatter, ['yaml', 'toml'])
-    .use(() => (tree) => {
-      console.dir(tree)
-    })
-    .process(await read('example.md'))
-
-  console.log(String(file))
-}
+console.log(String(file))
 ```
 
 Now, running `node example` yields:
@@ -226,6 +224,84 @@ A custom frontmatter with custom fences that are not repeated like this:
 // …
 .use(remarkFrontmatter, {type: 'json', fence: {open: '{', close: '}'}})
 // …
+```
+
+### Example: frontmatter as metadata
+
+This plugin handles the syntax of frontmatter in markdown.
+It does not *parse* that frontmatter as say YAML or TOML and expose it
+somewhere.
+
+In unified, there is a place for metadata about files:
+[`file.data`][file-data].
+For frontmatter specifically, it’s customary to expose it at `file.data.matter`.
+
+We can make a plugin that does this.
+This example uses the utility [`vfile-matter`][vfile-matter], which is specific
+to YAML.
+To support other data languages, look at this utility for inspiration.
+
+```js
+import {matter} from 'vfile-matter'
+
+/**
+ * Plugin to parse YAML frontmatter and expose it at `file.data.matter`.
+ *
+ * @type {import('unified').Plugin<Array<void>>}
+ */
+export default function myUnifiedPluginHandlingYamlMatter() {
+  return function (_, file) {
+    matter(file)
+  }
+}
+```
+
+This plugin can be used as follows:
+
+```js
+import {read} from 'to-vfile'
+import {unified} from 'unified'
+import remarkParse from 'remark-parse'
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkStringify from 'remark-stringify'
+import myUnifiedPluginHandlingYamlMatter from './my-unified-plugin-handling-yaml-matter.js'
+
+const file = await unified()
+  .use(remarkParse)
+  .use(remarkStringify)
+  .use(remarkFrontmatter)
+  .use(myUnifiedPluginHandlingYamlMatter)
+  .process(await read('example.md'))
+
+console.log(file.data.matter) // Logs an object.
+```
+
+### Example: frontmatter in MDX
+
+MDX has the ability to export data from it, where markdown does not.
+When authoring MDX, you can write `export` statements and expose arbitrary data
+through them.
+It is also possible to write frontmatter, and let a plugin turn those into
+export statements.
+
+To automatically turn frontmatter into export statements, use
+[`remark-mdx-frontmatter`][remark-mdx-frontmatter]
+This plugin can be used as follows:
+
+```js
+import {read, write} from 'to-vfile'
+import {compile} from '@mdx-js/mdx'
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
+
+const file = compile(await read('input.mdx'), {
+  remarkPlugins: [remarkFrontmatter, [remarkMdxFrontmatter, {name: 'matter'}]]
+})
+file.path = 'output.js'
+await write(file)
+
+const mod = await import('./output.js')
+console.log(mod.matter) // Logs an object.
 ```
 
 ## Syntax
@@ -368,3 +444,9 @@ abide by its terms.
 [hast]: https://github.com/syntax-tree/hast
 
 [create-plugin]: https://unifiedjs.com/learn/guide/create-a-plugin/
+
+[file-data]: https://github.com/vfile/vfile#filedata
+
+[vfile-matter]: https://github.com/vfile/vfile-matter
+
+[remark-mdx-frontmatter]: https://github.com/remcohaszing/remark-mdx-frontmatter
