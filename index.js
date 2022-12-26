@@ -12,6 +12,7 @@ import {
 /**
  * Plugin to add support for frontmatter.
  *
+ * @this {import('unified').Processor}
  * @type {import('unified').Plugin<[Options?]|void[], Root>}
  */
 export default function remarkFrontmatter(options = 'yaml') {
