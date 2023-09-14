@@ -1,95 +1,105 @@
 /**
- * @typedef {import('vfile').VFile} VFile
  * @typedef {import('mdast').Root} Root
  * @typedef {import('../index.js').Options} Options
  */
 
-import fs from 'node:fs'
-import path from 'node:path'
-import test from 'tape'
-import {readSync, writeSync} from 'to-vfile'
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+import test from 'node:test'
+import process from 'node:process'
 import {unified} from 'unified'
 import {remark} from 'remark'
 import {isHidden} from 'is-hidden'
 import remarkFrontmatter from '../index.js'
 
-test('remarkFrontmatter', (t) => {
-  t.doesNotThrow(() => {
-    // @ts-expect-error: remove when remark is released.
-    remark().use(remarkFrontmatter).freeze()
-  }, 'should not throw if not passed options')
+test('remarkFrontmatter', async function (t) {
+  await t.test('should not throw if not passed options', async function () {
+    assert.doesNotThrow(() => {
+      // @ts-expect-error: remove when remark is released.
+      remark().use(remarkFrontmatter).freeze()
+    })
+  })
 
-  t.doesNotThrow(() => {
-    unified().use(remarkFrontmatter).freeze()
-  }, 'should not throw if without parser or compiler')
-
-  t.throws(
-    () => {
-      // @ts-expect-error: invalid input.
-      unified().use(remarkFrontmatter, [1]).freeze()
-    },
-    /^Error: Expected matter to be an object, not `1`/,
-    'should throw if not given a preset or a matter'
+  await t.test(
+    'should not throw if without parser or compiler',
+    async function () {
+      assert.doesNotThrow(() => {
+        unified().use(remarkFrontmatter).freeze()
+      })
+    }
   )
 
-  t.throws(
-    () => {
+  await t.test(
+    'should throw if not given a preset or a matter',
+    async function () {
+      assert.throws(() => {
+        // @ts-expect-error: invalid input.
+        unified().use(remarkFrontmatter, [1]).freeze()
+      }, /^Error: Expected matter to be an object, not `1`/)
+    }
+  )
+
+  await t.test('should throw if given an unknown preset', async function () {
+    assert.throws(() => {
       // @ts-expect-error: invalid input.
       unified().use(remarkFrontmatter, ['jsonml']).freeze()
-    },
-    /^Error: Missing matter definition for `jsonml`/,
-    'should throw if given an unknown preset'
+    }, /^Error: Missing matter definition for `jsonml`/)
+  })
+
+  await t.test(
+    'should throw if given a matter without `type`',
+    async function () {
+      assert.throws(() => {
+        unified()
+          // @ts-expect-error: invalid input.
+          .use(remarkFrontmatter, [{marker: '*'}])
+          .freeze()
+      }, /^Error: Missing `type` in matter `{"marker":"\*"}`/)
+    }
   )
 
-  t.throws(
-    () => {
-      unified()
-        // @ts-expect-error: invalid input.
-        .use(remarkFrontmatter, [{marker: '*'}])
-        .freeze()
-    },
-    /^Error: Missing `type` in matter `{"marker":"\*"}`/,
-    'should throw if given a matter without `type`'
+  await t.test(
+    'should throw if given a matter without `marker`',
+    async function () {
+      assert.throws(() => {
+        unified()
+          // @ts-expect-error: invalid input.
+          .use(remarkFrontmatter, [{type: 'jsonml'}])
+          .freeze()
+      }, /^Error: Missing `marker` or `fence` in matter `{"type":"jsonml"}`/)
+    }
   )
-
-  t.throws(
-    () => {
-      unified()
-        // @ts-expect-error: invalid input.
-        .use(remarkFrontmatter, [{type: 'jsonml'}])
-        .freeze()
-    },
-    /^Error: Missing `marker` or `fence` in matter `{"type":"jsonml"}`/,
-    'should throw if given a matter without `marker`'
-  )
-
-  t.end()
 })
 
-test('fixtures', (t) => {
-  const base = path.join('test', 'fixtures')
-  const entries = fs.readdirSync(base).filter((d) => !isHidden(d))
+test('fixtures', async function (t) {
+  const base = new URL('fixtures/', import.meta.url)
+  const folders = await fs.readdir(base)
+
   let index = -1
 
-  t.plan(entries.length)
+  while (++index < folders.length) {
+    const folder = folders[index]
 
-  while (++index < entries.length) {
-    const fixture = entries[index]
-    t.test(fixture, (st) => {
-      const input = readSync(path.join(base, fixture, 'input.md'))
-      const treePath = path.join(base, fixture, 'tree.json')
-      const outputPath = path.join(base, fixture, 'output.md')
-      /** @type {VFile} */
-      let output
+    if (isHidden(folder)) continue
+
+    await t.test(folder, async function () {
+      const folderUrl = new URL(folder + '/', base)
+      const inputUrl = new URL('input.md', folderUrl)
+      const outputUrl = new URL('output.md', folderUrl)
+      const treeUrl = new URL('tree.json', folderUrl)
+      const configUrl = new URL('config.json', folderUrl)
+
+      const input = String(await fs.readFile(inputUrl))
+
+      /** @type {Options | undefined} */
+      let config
       /** @type {Root} */
       let expected
-      /** @type {Options|undefined} */
-      let config
+      /** @type {string} */
+      let output
 
       try {
-        config = JSON.parse(
-          String(readSync(path.join(base, fixture, 'config.json')))
-        )
+        config = JSON.parse(String(await fs.readFile(configUrl)))
       } catch {}
 
       // @ts-expect-error: remove when remark is released.
@@ -99,26 +109,28 @@ test('fixtures', (t) => {
       const actual = proc.parse(input)
 
       try {
-        output = readSync(outputPath)
+        output = String(await fs.readFile(outputUrl))
       } catch {
         output = input
       }
 
       try {
-        expected = JSON.parse(String(readSync(treePath)))
+        if ('UPDATE' in process.env) {
+          throw new Error('Updating…')
+        }
+
+        expected = JSON.parse(String(await fs.readFile(treeUrl)))
       } catch {
-        // New fixture.
-        writeSync({
-          path: treePath,
-          value: JSON.stringify(actual, null, 2) + '\n'
-        })
         expected = actual
+
+        // New fixture.
+        await fs.writeFile(treeUrl, JSON.stringify(actual, undefined, 2) + '\n')
       }
 
-      st.deepEqual(actual, expected, 'tree')
+      assert.deepEqual(actual, expected)
+
       // @ts-expect-error: remove when remark is released.
-      st.equal(String(proc.processSync(input)), String(output), 'process')
-      st.end()
+      assert.equal(String(await proc.process(input)), String(output))
     })
   }
 })
