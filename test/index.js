@@ -15,6 +15,7 @@ import remarkFrontmatter from '../index.js'
 
 test('remarkFrontmatter', (t) => {
   t.doesNotThrow(() => {
+    // @ts-expect-error: remove when remark is released.
     remark().use(remarkFrontmatter).freeze()
   }, 'should not throw if not passed options')
 
@@ -91,7 +92,10 @@ test('fixtures', (t) => {
         )
       } catch {}
 
+      // @ts-expect-error: remove when remark is released.
       const proc = remark().use(remarkFrontmatter, config)
+      /** @type {Root} */
+      // @ts-expect-error: remove when remark is released.
       const actual = proc.parse(input)
 
       try {
@@ -112,6 +116,7 @@ test('fixtures', (t) => {
       }
 
       st.deepEqual(actual, expected, 'tree')
+      // @ts-expect-error: remove when remark is released.
       st.equal(String(proc.processSync(input)), String(output), 'process')
       st.end()
     })

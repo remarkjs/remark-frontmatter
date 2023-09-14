@@ -29,7 +29,8 @@ export default function remarkFrontmatter(options = 'yaml') {
   function add(field, value) {
     const list = /** @type {unknown[]} */ (
       // Other extensions
-      /* c8 ignore next 2 */
+      /* c8 ignore next 3 */
+      // @ts-expect-error: to do: remove when remark is released.
       data[field] ? data[field] : (data[field] = [])
     )
 
