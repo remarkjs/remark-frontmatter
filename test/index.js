@@ -5,17 +5,22 @@
 
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import test from 'node:test'
 import process from 'node:process'
-import {unified} from 'unified'
-import {remark} from 'remark'
+import test from 'node:test'
 import {isHidden} from 'is-hidden'
+import {remark} from 'remark'
+import {unified} from 'unified'
 import remarkFrontmatter from '../index.js'
 
 test('remarkFrontmatter', async function (t) {
+  await t.test('should expose the public api', async function () {
+    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+      'default'
+    ])
+  })
+
   await t.test('should not throw if not passed options', async function () {
-    assert.doesNotThrow(() => {
-      // @ts-expect-error: remove when remark is released.
+    assert.doesNotThrow(function () {
       remark().use(remarkFrontmatter).freeze()
     })
   })
@@ -23,7 +28,7 @@ test('remarkFrontmatter', async function (t) {
   await t.test(
     'should not throw if without parser or compiler',
     async function () {
-      assert.doesNotThrow(() => {
+      assert.doesNotThrow(function () {
         unified().use(remarkFrontmatter).freeze()
       })
     }
@@ -32,16 +37,16 @@ test('remarkFrontmatter', async function (t) {
   await t.test(
     'should throw if not given a preset or a matter',
     async function () {
-      assert.throws(() => {
-        // @ts-expect-error: invalid input.
+      assert.throws(function () {
+        // @ts-expect-error: check how invalid input is handled.
         unified().use(remarkFrontmatter, [1]).freeze()
       }, /^Error: Expected matter to be an object, not `1`/)
     }
   )
 
   await t.test('should throw if given an unknown preset', async function () {
-    assert.throws(() => {
-      // @ts-expect-error: invalid input.
+    assert.throws(function () {
+      // @ts-expect-error: check how invalid input is handled.
       unified().use(remarkFrontmatter, ['jsonml']).freeze()
     }, /^Error: Missing matter definition for `jsonml`/)
   })
@@ -49,9 +54,9 @@ test('remarkFrontmatter', async function (t) {
   await t.test(
     'should throw if given a matter without `type`',
     async function () {
-      assert.throws(() => {
+      assert.throws(function () {
         unified()
-          // @ts-expect-error: invalid input.
+          // @ts-expect-error: check how invalid input is handled.
           .use(remarkFrontmatter, [{marker: '*'}])
           .freeze()
       }, /^Error: Missing `type` in matter `{"marker":"\*"}`/)
@@ -61,9 +66,9 @@ test('remarkFrontmatter', async function (t) {
   await t.test(
     'should throw if given a matter without `marker`',
     async function () {
-      assert.throws(() => {
+      assert.throws(function () {
         unified()
-          // @ts-expect-error: invalid input.
+          // @ts-expect-error: check how invalid input is handled.
           .use(remarkFrontmatter, [{type: 'jsonml'}])
           .freeze()
       }, /^Error: Missing `marker` or `fence` in matter `{"type":"jsonml"}`/)
@@ -102,7 +107,6 @@ test('fixtures', async function (t) {
         config = JSON.parse(String(await fs.readFile(configUrl)))
       } catch {}
 
-      // @ts-expect-error: remove when remark is released.
       const proc = remark().use(remarkFrontmatter, config)
       /** @type {Root} */
       // @ts-expect-error: remove when remark is released.
@@ -129,7 +133,6 @@ test('fixtures', async function (t) {
 
       assert.deepEqual(actual, expected)
 
-      // @ts-expect-error: remove when remark is released.
       assert.equal(String(await proc.process(input)), String(output))
     })
   }

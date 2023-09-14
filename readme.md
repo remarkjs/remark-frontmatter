@@ -105,8 +105,10 @@ const file = await unified()
   .use(remarkParse)
   .use(remarkStringify)
   .use(remarkFrontmatter, ['yaml', 'toml'])
-  .use(() => (tree) => {
-    console.dir(tree)
+  .use(function () {
+    return (tree) {
+      console.dir(tree)
+    }
   })
   .process(await read('example.md'))
 
