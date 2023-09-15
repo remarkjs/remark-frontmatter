@@ -8,7 +8,7 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**remark**][remark] plugin to support frontmatter (YAML, TOML, and more).
+**[remark][]** plugin to support frontmatter (YAML, TOML, and more).
 
 ## Contents
 
@@ -18,11 +18,14 @@
 *   [Use](#use)
 *   [API](#api)
     *   [`unified().use(remarkFrontmatter[, options])`](#unifieduseremarkfrontmatter-options)
+    *   [`Options`](#options)
 *   [Examples](#examples)
-    *   [Example: custom marker](#example-custom-marker)
-    *   [Example: custom fence](#example-custom-fence)
+    *   [Example: different markers and fences](#example-different-markers-and-fences)
     *   [Example: frontmatter as metadata](#example-frontmatter-as-metadata)
     *   [Example: frontmatter in MDX](#example-frontmatter-in-mdx)
+*   [Authoring](#authoring)
+*   [HTML](#html)
+*   [CSS](#css)
 *   [Syntax](#syntax)
 *   [Syntax tree](#syntax-tree)
 *   [Types](#types)
@@ -36,31 +39,33 @@
 
 This package is a [unified][] ([remark][]) plugin to add support for YAML, TOML,
 and other frontmatter.
-You can use this to add support for parsing and serializing this syntax
-extension.
 
-**unified** is a project that transforms content with abstract syntax trees
-(ASTs).
-**remark** adds support for markdown to unified.
-**mdast** is the markdown AST that remark uses.
-**micromark** is the markdown parser we use.
-This is a remark plugin that adds support for the frontmatter syntax and AST to
-remark.
+Frontmatter is a metadata format in front of the content.
+It’s typically written in YAML and is often used with markdown.
+
+This plugin follow how GitHub handles frontmatter.
+GitHub only supports YAML frontmatter, but this plugin also supports different
+flavors (such as TOML).
 
 ## When should I use this?
 
-Frontmatter is a metadata format in front of content.
-It’s typically written in YAML and is often used with markdown.
-This mechanism works well when you want authors, that have some markup
+You can use frontmatter when you want authors, that have some markup
 experience, to configure where or how the content is displayed or supply
-metadata about content.
-Frontmatter does not work everywhere so it makes markdown less portable.
+metadata about content, and know that the markdown is only used in places
+that support frontmatter.
 A good example use case is markdown being rendered by (static) site generators.
+
+If you *just* want to turn markdown into HTML (with maybe a few extensions such
+as frontmatter), we recommend [`micromark`][micromark] with
+[`micromark-extension-frontmatter`][micromark-extension-frontmatter] instead.
+If you don’t use plugins and want to access the syntax tree, you can use
+[`mdast-util-from-markdown`][mdast-util-from-markdown] with
+[`mdast-util-frontmatter`][mdast-util-frontmatter].
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
-In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
+This package is [ESM only][esm].
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install remark-frontmatter
@@ -82,31 +87,31 @@ In browsers with [`esm.sh`][esmsh]:
 
 ## Use
 
-Say we have the following file, `example.md`:
+Say our document `example.md` contains:
 
 ```markdown
 +++
-title = "New Website"
+layout = "solar-system"
 +++
 
-# Other markdown
+# Jupiter
 ```
 
-And our module, `example.js`, looks as follows:
+…and our module `example.js` contains:
 
 ```js
-import {read} from 'to-vfile'
-import {unified} from 'unified'
-import remarkParse from 'remark-parse'
 import remarkFrontmatter from 'remark-frontmatter'
+import remarkParse from 'remark-parse'
 import remarkStringify from 'remark-stringify'
+import {unified} from 'unified'
+import {read} from 'to-vfile'
 
 const file = await unified()
   .use(remarkParse)
   .use(remarkStringify)
   .use(remarkFrontmatter, ['yaml', 'toml'])
   .use(function () {
-    return (tree) {
+    return function (tree) {
       console.dir(tree)
     }
   })
@@ -115,117 +120,197 @@ const file = await unified()
 console.log(String(file))
 ```
 
-Now, running `node example` yields:
+…then running `node example.js` yields:
 
 ```js
 {
   type: 'root',
   children: [
-    {type: 'toml', value: 'title = "New Website"', position: [Object]},
+    {type: 'toml', value: 'layout = "solar-system"', position: [Object]},
     {type: 'heading', depth: 1, children: [Array], position: [Object]}
   ],
   position: {
     start: {line: 1, column: 1, offset: 0},
-    end: {line: 6, column: 1, offset: 48}
+    end: {line: 6, column: 1, offset: 43}
   }
 }
 ```
 
 ```markdown
 +++
-title = "New Website"
+layout = "solar-system"
 +++
 
-# Other markdown
+# Jupiter
 ```
 
 ## API
 
 This package exports no identifiers.
-The default export is `remarkFrontmatter`.
+The default export is [`remarkFrontmatter`][api-remark-frontmatter].
 
 ### `unified().use(remarkFrontmatter[, options])`
 
-Configures remark so that it can parse and serialize frontmatter (YAML, TOML,
-and more).
-Doesn’t parse the data inside them: [create your own plugin][create-plugin] to
-do that.
+Add support for frontmatter.
 
-##### `options`
+###### Parameters
 
-One `preset` or `Matter`, or an array of them, defining all the supported
-frontmatters (default: `'yaml'`).
+*   `options` ([`Options`][api-options], default: `'yaml'`)
+    — configuration
 
-##### `preset`
+###### Returns
 
-Either `'yaml'` or `'toml'`:
+Nothing (`undefined`).
 
-*   `'yaml'` — `Matter` defined as `{type: 'yaml', marker: '-'}`
-*   `'toml'` — `Matter` defined as `{type: 'toml', marker: '+'}`
+###### Notes
 
-##### `Matter`
+Doesn’t parse the data inside them:
+[create your own plugin][unified-create-plugin] to do that.
 
-An object with a `type` and either a `marker` or a `fence`:
+### `Options`
 
-*   `type` (`string`)
-    — Type to tokenize as
-*   `marker` (`string` or `{open: string, close: string}`)
-    — Character used to construct fences.
-    By providing an object with `open` and `close` different characters can be
-    used for opening and closing fences.
-    For example the character `'-'` will result in `'---'` being used as the
-    fence
-*   `fence` (`string` or `{open: string, close: string}`)
-    — String used as the complete fence.
-    By providing an object with `open` and `close` different values can be used
-    for opening and closing fences.
-    This can be used too if fences contain different characters or lengths other
-    than 3
-*   `anywhere` (`boolean`, default: `false`)
-    – if `true`, matter can be found anywhere in the document.
-    If `false` (default), only matter at the start of the document is recognized
+Configuration (TypeScript type).
+
+###### Type
+
+```ts
+type Options = Array<Matter | Preset> | Matter | Preset
+
+/**
+ * Sequence.
+ *
+ * Depending on how this structure is used, it reflects a marker or a fence.
+ */
+export type Info = {
+  /**
+   * Closing.
+   */
+  close: string
+  /**
+   * Opening.
+   */
+  open: string
+}
+
+/**
+ * Fence configuration.
+ */
+type FenceProps = {
+  /**
+   * Complete fences.
+   *
+   * This can be used when fences contain different characters or lengths
+   * other than 3.
+   * Pass `open` and `close` to interface to specify different characters for opening and
+   * closing fences.
+   */
+  fence: Info | string
+  /**
+   * If `fence` is set, `marker` must not be set.
+   */
+  marker?: never
+}
+
+/**
+ * Marker configuration.
+ */
+type MarkerProps = {
+  /**
+   * Character repeated 3 times, used as complete fences.
+   *
+   * For example the character `'-'` will result in `'---'` being used as the
+   * fence
+   * Pass `open` and `close` to specify different characters for opening and
+   * closing fences.
+   */
+  marker: Info | string
+  /**
+   * If `marker` is set, `fence` must not be set.
+   */
+  fence?: never
+}
+
+/**
+ * Fields describing a kind of matter.
+ *
+ * > 👉 **Note**: using `anywhere` is a terrible idea.
+ * > It’s called frontmatter, not matter-in-the-middle or so.
+ * > This makes your markdown less portable.
+ *
+ * > 👉 **Note**: `marker` and `fence` are mutually exclusive.
+ * > If `marker` is set, `fence` must not be set, and vice versa.
+ */
+type Matter = (MatterProps & FenceProps) | (MatterProps & MarkerProps)
+
+/**
+ * Fields describing a kind of matter.
+ */
+type MatterProps = {
+  /**
+   * Node type to tokenize as.
+   */
+  type: string
+  /**
+   * Whether matter can be found anywhere in the document, normally, only matter
+   * at the start of the document is recognized.
+   *
+   * > 👉 **Note**: using this is a terrible idea.
+   * > It’s called frontmatter, not matter-in-the-middle or so.
+   * > This makes your markdown less portable.
+   */
+  anywhere?: boolean | null | undefined
+}
+
+/**
+ * Known name of a frontmatter style.
+ */
+type Preset = 'toml' | 'yaml'
+```
 
 ## Examples
 
-### Example: custom marker
+### Example: different markers and fences
 
-A custom frontmatter with different open and close markers, repeated 3 times,
-that looks like this:
+Here are a couple of example of different matter objects and what frontmatter
+they match.
+
+To match frontmatter with the same opening and closing fence, namely three of
+the same markers, use for example `{type: 'yaml', marker: '-'}`, which matches:
+
+```yaml
+---
+key: value
+---
+```
+
+To match frontmatter with different opening and closing fences, which each use
+three different markers, use for example
+`{type: 'custom', marker: {open: '<', close: '>'}}`, which matches:
 
 ```text
 <<<
 data
 >>>
-
-# hi
 ```
 
-…can be supported with:
-
-```js
-// …
-.use(remarkFrontmatter, {type: 'custom', marker: {open: '<', close: '>'}})
-// …
-```
-
-### Example: custom fence
-
-A custom frontmatter with custom fences that are not repeated like this:
+To match frontmatter with the same opening and closing fences, which both use
+the same custom string, use for example `{type: 'custom', fence: '+=+=+=+'}`,
+which matches:
 
 ```text
++=+=+=+
+data
++=+=+=+
+```
+
+To match frontmatter with different opening and closing fences, which each use
+different custom strings, use for example
+`{type: 'json', fence: {open: '{', close: '}'}}`, which matches:
+
+```json
 {
   "key": "value"
 }
-
-# hi
-```
-
-…can be supported with:
-
-```js
-// …
-.use(remarkFrontmatter, {type: 'json', fence: {open: '{', close: '}'}})
-// …
 ```
 
 ### Example: frontmatter as metadata
@@ -235,8 +320,8 @@ It does not *parse* that frontmatter as say YAML or TOML and expose it
 somewhere.
 
 In unified, there is a place for metadata about files:
-[`file.data`][file-data].
-For frontmatter specifically, it’s customary to expose it at `file.data.matter`.
+[`file.data`][vfile-file-data].
+For frontmatter specifically, it’s customary to expose parsed data at `file.data.matter`.
 
 We can make a plugin that does this.
 This example uses the utility [`vfile-matter`][vfile-matter], which is specific
@@ -244,21 +329,47 @@ to YAML.
 To support other data languages, look at this utility for inspiration.
 
 ```js
+/**
+ * @typedef {import('unist').Node} Node
+ * @typedef {import('vfile').VFile} VFile
+ */
+
 import {matter} from 'vfile-matter'
 
 /**
- * Plugin to parse YAML frontmatter and expose it at `file.data.matter`.
+ * Parse YAML frontmatter and expose it at `file.data.matter`.
  *
- * @type {import('unified').Plugin<Array<void>>}
+ * @returns
+ *   Transform.
  */
 export default function myUnifiedPluginHandlingYamlMatter() {
-  return function (_, file) {
+  /**
+   * Transform.
+   *
+   * @param {Node} tree
+   *   Tree.
+   * @param {VFile} file
+   *   File.
+   * @returns {undefined}
+   *   Nothing.
+   */
+  return function (tree, file) {
     matter(file)
   }
 }
 ```
 
-This plugin can be used as follows:
+…with an example markdown file `example.md`:
+
+```markdown
+---
+key: value
+---
+
+# Venus
+```
+
+…and using the plugin with an `example.js` containing:
 
 ```js
 import {read} from 'to-vfile'
@@ -275,7 +386,7 @@ const file = await unified()
   .use(myUnifiedPluginHandlingYamlMatter)
   .process(await read('example.md'))
 
-console.log(file.data.matter) // Logs an object.
+console.log(file.data.matter) // => {key: 'value'}
 ```
 
 ### Example: frontmatter in MDX
@@ -287,46 +398,74 @@ It is also possible to write frontmatter, and let a plugin turn those into
 export statements.
 
 To automatically turn frontmatter into export statements, use
-[`remark-mdx-frontmatter`][remark-mdx-frontmatter]
+[`remark-mdx-frontmatter`][remark-mdx-frontmatter].
+
+With an `example.mdx` as follows:
+
+```mdx
+---
+key: value
+---
+
+# Mars
+```
+
 This plugin can be used as follows:
 
 ```js
-import {read, write} from 'to-vfile'
 import {compile} from '@mdx-js/mdx'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
+import {read, write} from 'to-vfile'
 
-const file = compile(await read('input.mdx'), {
+const file = await compile(await read('example.mdx'), {
   remarkPlugins: [remarkFrontmatter, [remarkMdxFrontmatter, {name: 'matter'}]]
 })
 file.path = 'output.js'
 await write(file)
 
 const mod = await import('./output.js')
-console.log(mod.matter) // Logs an object.
+console.log(mod.matter) // => {key: 'value'}
 ```
+
+## Authoring
+
+When authoring markdown with frontmatter, it’s recommended to use YAML
+frontmatter if possible.
+While YAML has some warts, it works in the most places, so using it guarantees
+the highest chance of portability.
+
+In certain ecosystems, other flavors are widely used.
+For example, in the Rust ecosystem, TOML is often used.
+In such cases, using TOML is an okay choice.
+
+When possible, do not use other types of frontmatter, and do not allow
+frontmatter anywhere.
+
+## HTML
+
+Frontmatter does not relate to HTML elements.
+It is typically stripped, which is what [`remark-rehype`][remark-rehype] does.
+
+## CSS
+
+This package does not relate to CSS.
 
 ## Syntax
 
-This plugin applies a micromark extensions to parse the syntax.
-See its readme for how it works:
-
-*   [`micromark-extension-frontmatter`](https://github.com/micromark/micromark-extension-frontmatter)
-
-The syntax supported depends on the given configuration.
+See [*Syntax* in
+`micromark-extension-frontmatter`](https://github.com/micromark/micromark-extension-frontmatter#syntax).
 
 ## Syntax tree
 
-This plugin applies one mdast utility to build and serialize the AST.
-See its readme for how it works:
-
-*   [`mdast-util-frontmatter`](https://github.com/syntax-tree/mdast-util-frontmatter)
-
-The node types supported in the tree depend on the given configuration.
+See [*Syntax tree* in
+`mdast-util-frontmatter`](https://github.com/syntax-tree/mdast-util-frontmatter#syntax-tree).
 
 ## Types
 
 This package is fully typed with [TypeScript][].
+It exports the additional type [`Options`][api-options].
+
 The YAML node type is supported in `@types/mdast` by default.
 To add other node types, register them by adding them to
 `FrontmatterContentMap`:
@@ -334,32 +473,35 @@ To add other node types, register them by adding them to
 ```ts
 import type {Literal} from 'mdast'
 
-interface TOML extends Literal {
+interface Toml extends Literal {
   type: 'toml'
 }
 
 declare module 'mdast' {
   interface FrontmatterContentMap {
-    // Allow using toml nodes defined by `remark-frontmatter`.
-    toml: TOML
+    // Allow using TOML nodes defined by `remark-frontmatter`.
+    toml: Toml
   }
 }
 ```
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
 
-This plugin works with unified version 6+ and remark version 13+.
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line, `remark-frontmatter@^4`,
+compatible with Node.js 12.
+
+This plugin works with unified 6+ and remark 13+.
 
 ## Security
 
-Use of `remark-frontmatter` does not involve [**rehype**][rehype]
-([**hast**][hast]) or user content so there are no openings for
-[cross-site scripting (XSS)][xss] attacks.
+Use of `remark-frontmatter` does not involve **[rehype][]** ([hast][]) or user
+content so there are no openings for [cross-site scripting (XSS)][wiki-xss]
+attacks.
 
 ## Related
 
@@ -369,7 +511,7 @@ Use of `remark-frontmatter` does not involve [**rehype**][rehype]
     — support GFM (autolink literals, footnotes, strikethrough, tables,
     tasklists)
 *   [`remark-mdx`](https://github.com/mdx-js/mdx/tree/main/packages/remark-mdx)
-    — support MDX (JSX, expressions, ESM)
+    — support MDX (ESM, JSX, expressions)
 *   [`remark-directive`](https://github.com/remarkjs/remark-directive)
     — support directives
 *   [`remark-math`](https://github.com/remarkjs/remark-math)
@@ -403,9 +545,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/remark-frontmatter
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/remark-frontmatter.svg
+[size-badge]: https://img.shields.io/bundlejs/size/remark-frontmatter
 
-[size]: https://bundlephobia.com/result?p=remark-frontmatter
+[size]: https://bundlejs.com/?q=remark-frontmatter
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -419,36 +561,52 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
 [esmsh]: https://esm.sh
 
 [health]: https://github.com/remarkjs/.github
 
-[contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
+[contributing]: https://github.com/remarkjs/.github/blob/main/contributing.md
 
-[support]: https://github.com/remarkjs/.github/blob/HEAD/support.md
+[support]: https://github.com/remarkjs/.github/blob/main/support.md
 
-[coc]: https://github.com/remarkjs/.github/blob/HEAD/code-of-conduct.md
+[coc]: https://github.com/remarkjs/.github/blob/main/code-of-conduct.md
 
 [license]: license
 
 [author]: https://wooorm.com
 
-[unified]: https://github.com/unifiedjs/unified
+[mdast-util-from-markdown]: https://github.com/syntax-tree/mdast-util-from-markdown
 
-[remark]: https://github.com/remarkjs/remark
+[mdast-util-frontmatter]: https://github.com/syntax-tree/mdast-util-frontmatter
 
-[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+[micromark]: https://github.com/micromark/micromark
 
-[typescript]: https://www.typescriptlang.org
-
-[rehype]: https://github.com/rehypejs/rehype
+[micromark-extension-frontmatter]: https://github.com/micromark/micromark-extension-frontmatter
 
 [hast]: https://github.com/syntax-tree/hast
 
-[create-plugin]: https://unifiedjs.com/learn/guide/create-a-plugin/
+[rehype]: https://github.com/rehypejs/rehype
 
-[file-data]: https://github.com/vfile/vfile#filedata
+[remark]: https://github.com/remarkjs/remark
+
+[remark-rehype]: https://github.com/remarkjs/remark-rehype
+
+[remark-mdx-frontmatter]: https://github.com/remcohaszing/remark-mdx-frontmatter
+
+[typescript]: https://www.typescriptlang.org
+
+[unified]: https://github.com/unifiedjs/unified
+
+[unified-create-plugin]: https://unifiedjs.com/learn/guide/create-a-plugin/
+
+[vfile-file-data]: https://github.com/vfile/vfile#filedata
 
 [vfile-matter]: https://github.com/vfile/vfile-matter
 
-[remark-mdx-frontmatter]: https://github.com/remcohaszing/remark-mdx-frontmatter
+[wiki-xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[api-options]: #options
+
+[api-remark-frontmatter]: #unifieduseremarkfrontmatter-options
