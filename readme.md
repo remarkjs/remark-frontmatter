@@ -74,14 +74,14 @@ npm install remark-frontmatter
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import remarkFrontmatter from 'https://esm.sh/remark-frontmatter@4'
+import remarkFrontmatter from 'https://esm.sh/remark-frontmatter@5'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import remarkFrontmatter from 'https://esm.sh/remark-frontmatter@4?bundle'
+  import remarkFrontmatter from 'https://esm.sh/remark-frontmatter@5?bundle'
 </script>
 ```
 
