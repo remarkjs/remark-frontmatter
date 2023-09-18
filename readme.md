@@ -328,6 +328,8 @@ This example uses the utility [`vfile-matter`][vfile-matter], which is specific
 to YAML.
 To support other data languages, look at this utility for inspiration.
 
+`my-unified-plugin-handling-yaml-matter.js`:
+
 ```js
 /**
  * @typedef {import('unist').Node} Node
@@ -372,11 +374,11 @@ key: value
 …and using the plugin with an `example.js` containing:
 
 ```js
-import {read} from 'to-vfile'
-import {unified} from 'unified'
 import remarkParse from 'remark-parse'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkStringify from 'remark-stringify'
+import {read} from 'to-vfile'
+import {unified} from 'unified'
 import myUnifiedPluginHandlingYamlMatter from './my-unified-plugin-handling-yaml-matter.js'
 
 const file = await unified()
@@ -471,10 +473,11 @@ To add other node types, register them by adding them to
 `FrontmatterContentMap`:
 
 ```ts
-import type {Literal} from 'mdast'
+import type {Data, Literal} from 'mdast'
 
 interface Toml extends Literal {
   type: 'toml'
+  data?: TomlData
 }
 
 declare module 'mdast' {
