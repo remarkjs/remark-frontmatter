@@ -9,7 +9,6 @@ import process from 'node:process'
 import test from 'node:test'
 import {isHidden} from 'is-hidden'
 import {remark} from 'remark'
-import {unified} from 'unified'
 import remarkFrontmatter from '../index.js'
 
 test('remarkFrontmatter', async function (t) {
@@ -26,20 +25,11 @@ test('remarkFrontmatter', async function (t) {
   })
 
   await t.test(
-    'should not throw if without parser or compiler',
-    async function () {
-      assert.doesNotThrow(function () {
-        unified().use(remarkFrontmatter).freeze()
-      })
-    }
-  )
-
-  await t.test(
     'should throw if not given a preset or a matter',
     async function () {
       assert.throws(function () {
         // @ts-expect-error: check how invalid input is handled.
-        unified().use(remarkFrontmatter, [1]).freeze()
+        remark().use(remarkFrontmatter, [1]).freeze()
       }, /^Error: Expected matter to be an object, not `1`/)
     }
   )
@@ -47,7 +37,7 @@ test('remarkFrontmatter', async function (t) {
   await t.test('should throw if given an unknown preset', async function () {
     assert.throws(function () {
       // @ts-expect-error: check how invalid input is handled.
-      unified().use(remarkFrontmatter, ['jsonml']).freeze()
+      remark().use(remarkFrontmatter, ['jsonml']).freeze()
     }, /^Error: Missing matter definition for `jsonml`/)
   })
 
@@ -55,7 +45,7 @@ test('remarkFrontmatter', async function (t) {
     'should throw if given a matter without `type`',
     async function () {
       assert.throws(function () {
-        unified()
+        remark()
           // @ts-expect-error: check how invalid input is handled.
           .use(remarkFrontmatter, [{marker: '*'}])
           .freeze()
@@ -67,7 +57,7 @@ test('remarkFrontmatter', async function (t) {
     'should throw if given a matter without `marker`',
     async function () {
       assert.throws(function () {
-        unified()
+        remark()
           // @ts-expect-error: check how invalid input is handled.
           .use(remarkFrontmatter, [{type: 'jsonml'}])
           .freeze()
@@ -108,8 +98,6 @@ test('fixtures', async function (t) {
       } catch {}
 
       const proc = remark().use(remarkFrontmatter, config)
-      /** @type {Root} */
-      // @ts-expect-error: remove when remark is released.
       const actual = proc.parse(input)
 
       try {
