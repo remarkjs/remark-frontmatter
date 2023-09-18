@@ -1,6 +1,6 @@
 /**
  * @typedef {import('mdast').Root} Root
- * @typedef {import('../index.js').Options} Options
+ * @typedef {import('remark-frontmatter').Options} Options
  */
 
 import assert from 'node:assert/strict'
@@ -9,11 +9,11 @@ import process from 'node:process'
 import test from 'node:test'
 import {isHidden} from 'is-hidden'
 import {remark} from 'remark'
-import remarkFrontmatter from '../index.js'
+import remarkFrontmatter from 'remark-frontmatter'
 
 test('remarkFrontmatter', async function (t) {
   await t.test('should expose the public api', async function () {
-    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+    assert.deepEqual(Object.keys(await import('remark-frontmatter')).sort(), [
       'default'
     ])
   })
