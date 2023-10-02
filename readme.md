@@ -477,7 +477,7 @@ import type {Data, Literal} from 'mdast'
 
 interface Toml extends Literal {
   type: 'toml'
-  data?: TomlData
+  data?: Data
 }
 
 declare module 'mdast' {
